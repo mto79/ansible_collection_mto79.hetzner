@@ -9,8 +9,6 @@ Ansible collection that provisions Hetzner products like dedicated server or clo
 ### Lookup plugins
 Name | Description
 --- | ---
-[tribe29.checkmk.account_attribute](https://github.com/tribe29/ansible-collection-tribe29.checkmk/tree/main/docs/tribe29.checkmk.account_attribute_lookup.rst)|Look up Checkmk account attributes.
--->
 
 ### Modules
 Name | Description | Tests
