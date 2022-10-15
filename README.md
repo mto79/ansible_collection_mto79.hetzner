@@ -58,7 +58,7 @@ collections:
     version: X.Y.Z
 ```
 
-### More information about MTO79
+## More information
 
 * [MTO Website](https://mto.nu)
 
