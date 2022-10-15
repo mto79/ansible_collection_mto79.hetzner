@@ -1,0 +1,28 @@
+---
+galaxy_info:
+  author: Marc Ouwerkerk.
+  role_name: hetzner_rescue
+  description: Provision Hetzner Dedicated server with rescue
+  license: Apache-2.0
+  company: MTO79
+  min_ansible_version: "2.10"
+
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - mto79
+    - hetzner
+    - rescue
+
+dependencies: []
+
+...

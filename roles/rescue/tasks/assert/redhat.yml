@@ -1,0 +1,9 @@
+---
+- name: "Assert | Ensure that checkmk_server_epel_dl_fedora is set correctly."
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - checkmk_server_epel_dl_fedora is defined
+      - checkmk_server_epel_dl_fedora is boolean
+
+...
