@@ -1,6 +1,6 @@
-# [Checkmk-Server](#checkmk-server)
+# [Hetzner-Rescue](#hetzner-rescue)
 
-CheckMK role to install server
+Hetzner role to provisioning a dedicated server with rescue
 
 ## [Requirements](#requirements)
 
@@ -17,10 +17,10 @@ CheckMK role to install server
   gather_facts: yes
 
   roles:
-    - { role: proxyservices.checkmk.server, tags: ['checkmk', 'server', 'application'] }
+    - { role: mto79.hetzner.rescue, tags: ['mto79', 'hetzner-rescue', 'system'] }
 
   collections:
-    - proxyservices.checkmk.server
+    - mto79.hetzner.rescue
 
 ```
 
@@ -28,28 +28,26 @@ CheckMK role to install server
 
 | Variable | Default | Description |
 | -------- | ------- | ----------- |
-| `checkmk_server_opsgenie_enable` | `false` | Enable/Disable opsgenie integration
-| `checkmk_server_opsgenie_team` | `Empty` | Assign Opsgenie team
-| `checkmk_server_opsgenie_heartbeat` | `Empty` |  Assign Opsgenie heartbeat
+| `hetzner_rescue_api_url` | `https://robot-ws.your-server.de` | Username for Hetzner Dedicated server |
+| `hetzner_rescue_api_username` | `Empty` | Username for Hetzner Dedicated server |
+| `hetzner_rescue_api_password` | `Empty` | Password for Hetzner Dedicated server |
+| `hetzner_rescue_hostname` | `Empty` | Hostname for Hetzner Dedicated server |
+| `hetzner_rescue_ip` | `xxx.xxx.xxx.xxx` | IP address for Hetzner Dedicated server |
+| `hetzner_rescue_disk1` | `sda` | Disk1 for Hetzner Dedicated server |
+| `hetzner_rescue_disk2` | `sdb` | Disk2 for Hetzner Dedicated server |
+| `hetzner_rescue_image` | `/root/.oldroot/nfs/install/../images/CentOS-80-stream-amd64-base.tar.gz` | Default image for Hetzner Dedicated server |
+| `hetzner_rescue_image_ignore_errors` | `False` | To overlook errors image for Hetzner Dedicated server |
 
 ## [Standards](#standards)
 
-* [KT1 - Code manifesto](https://proxymanagedservices.atlassian.net/wiki/spaces/KT1/pages/255197272/Code+Manifest)
-* [MST - Standards](https://proxymanagedservices.atlassian.net/wiki/spaces/PROD/pages/258703444/Ansible+Standards)
-
 ## [Maintainers](#maintainers)
 
-* @nbaay
-* @mouwerkerk
-* @bversluis
-* @jvdberg
-* @eprinsen
-* @jvrolijk
+Marc Ouwerkerk (https://github.com/mto79)
 
 ## [Todo](#todo)
 
-* Standaardwaarden voor molecule testen toevoegen
+* testing
 
 ## [License](#license)
 
-Proprietary, MST Proxy B.V.
+Apache-2.0

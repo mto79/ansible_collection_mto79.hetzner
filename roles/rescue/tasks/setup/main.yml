@@ -79,7 +79,7 @@
 
 - name: "Setup | Copy autosetup configuration file"
   ansible.buitlin.template:
-    src: "{{ hetzner_rescue_autosetup_file }}"
+    src: "templates/hetzner_rescue_autosetup.j2"
     dest: /root/autosetup
     owner: root
     group: root
@@ -135,7 +135,7 @@
   connection: local
 
 - name: "Setup | Check ansible_python_interpreter"
-  ping:
+  ansible.builtin.ping:
   register: _hetzner_rescue_rc
   ignore_errors: true
 

@@ -1,118 +1,75 @@
 ---
-- name: "Assert | test if checkmk_server_role_name is set correctly"
+- name: "Assert | test if hetzner_rescue_role_name is set correctly"
   ansible.builtin.assert:
     that:
-      - checkmk_server_role_name is defined
-      - checkmk_server_role_name is string
-      - checkmk_server_role_name in ["checkmk_server"]
+      - hetzner_rescue_role_name is defined
+      - hetzner_rescue_role_name is string
+      - hetzner_rescue_role_name in ["hetzner_rescue"]
     quiet: true
 
-- name: "Assert | test if checkmk_server_server_stable_os is set correctly"
+- name: "Assert | test if hetzner_rescue_api_url is set correctly"
   ansible.builtin.assert:
     that:
-      - item is defined
-      - item is string
-    quiet: true
-  loop: "{{ checkmk_server_server_stable_os }}"
-  when:
-    - checkmk_server_server_stable_os is defined
-
-- name: "Assert | test if checkmk_server_edition is set correctly"
-  ansible.builtin.assert:
-    that:
-      - checkmk_server_edition is defined
-      - checkmk_server_edition is string
+      - hetzner_rescue_api_url is defined
+      - hetzner_rescue_api_url is string
     quiet: true
 
-- name: "Assert | test if checkmk_server_version is set correctly"
+- name: "Assert | test if hetzner_rescue_api_username is set correctly"
   ansible.builtin.assert:
     that:
-      - checkmk_server_version is defined
-      - checkmk_server_version is string
+      - hetzner_rescue_api_username is defined
+      - hetzner_rescue_api_username is string
     quiet: true
 
-- name: "Assert | test if checkmk_server_verify_setup is set correctly."
-  ansible.builtin.assert:
-    quiet: true
-    that:
-      - checkmk_server_verify_setup is defined
-      - checkmk_server_verify_setup is boolean
-
-- name: "Assert | test if checkmk_server_configure_firewall is set correctly."
-  ansible.builtin.assert:
-    quiet: true
-    that:
-      - checkmk_server_configure_firewall is defined
-      - checkmk_server_configure_firewall is boolean
-
-- name: "Assert | test if checkmk_server_backup_on_update is set correctly"
+- name: "Assert | test if hetzner_rescue_api_password is set correctly"
   ansible.builtin.assert:
     that:
-      - checkmk_server_backup_on_update is defined
-      - checkmk_server_backup_on_update is string
+      - hetzner_rescue_api_password is defined
+      - hetzner_rescue_api_password is encrypted
     quiet: true
 
-- name: "Assert | test if checkmk_server_backup_dir is set correctly"
+- name: "Assert | test if hetzner_rescue_hostname is set correctly"
   ansible.builtin.assert:
     that:
-      - checkmk_server_backup_dir is defined
-      - checkmk_server_backup_dir is string
+      - hetzner_rescue_hostname is defined
+      - hetzner_rescue_hostname is string
     quiet: true
 
-- name: "Assert | test if checkmk_server_backup_opts is set correctly"
+- name: "Assert | test if hetzner_rescue_ip is set correctly"
   ansible.builtin.assert:
     that:
-      - checkmk_server_backup_opts is defined
-      - checkmk_server_backup_opts is string
+      - hetzner_rescue_ip is defined
+      - hetzner_rescue_ip is string
     quiet: true
 
-- name: "Assert | test if checkmk_server_allow_downgrades is set correctly"
+- name: "Assert | test if hetzner_rescue_disk1 is set correctly"
   ansible.builtin.assert:
     that:
-      - checkmk_server_allow_downgrades is defined
-      - checkmk_server_allow_downgrades is string
+      - hetzner_rescue_disk1 is defined
+      - hetzner_rescue_disk1 is string
+      - hetzner_rescue_disk1 in ["sda"]
     quiet: true
 
-- name: "Assert | test if properties in checkmk_server_sites is set correctly"
+- name: "Assert | test if hetzner_rescue_disk2 is set correctly"
   ansible.builtin.assert:
     that:
-      - item.name is defined
-      - item.name is string
-      - item.version is defined
-      - item.version is string
-      - item.state is defined
-      - item.state is string
-      - item.state in [ "started", "absent", "stoppped" ]
-      - item.opsgenie is defined
-      - item.opsgenie is boolean
-      # - item.adminpw is defined
-      # - item.adminpw is encrypte
-    quiet: true
-  loop: "{{ checkmk_server_sites }}"
-  loop_control:
-    label: "{{ item.name }}"
-  when:
-    - checkmk_server_sites is defined
-
-- name: "Assert | test if checkmk_server_opsgenie_enable is set correctly"
-  ansible.builtin.assert:
-    that:
-      - checkmk_server_opsgenie_enable is defined
-      - checkmk_server_opsgenie_enable is boolean
+      - hetzner_rescue_disk2 is defined
+      - hetzner_rescue_disk2 is string
+      - hetzner_rescue_disk2 in ["sdb"]
     quiet: true
 
-- name: "Assert | test if checkmk_server_opsgenie_team is set correctly"
+- name: "Assert | test if hetzner_rescue_image is set correctly"
   ansible.builtin.assert:
     that:
-      - checkmk_server_opsgenie_team is defined
-      - checkmk_server_opsgenie_team is string
+      - hetzner_rescue_image is defined
+      - hetzner_rescue_image is string
     quiet: true
 
-- name: "Assert | test if checkmk_server_opsgenie_heartbeat is set correctly"
+- name: "Assert | test if hetzner_rescue_image_ignore_errors is set correctly."
   ansible.builtin.assert:
-    that:
-      - checkmk_server_opsgenie_heartbeat is defined
-      - checkmk_server_opsgenie_heartbeat is string
     quiet: true
+    that:
+      - hetzner_rescue_image_ignore_errors is defined
+      - hetzner_rescue_image_ignore_errors  is boolean
 
 ...
