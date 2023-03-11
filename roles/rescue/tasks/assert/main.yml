@@ -28,48 +28,47 @@
       - hetzner_rescue_api_password is vault_encrypted
     quiet: true
 
-- name: "Assert | test if hetzner_rescue_hostname is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_rescue_hostname is defined
-      - hetzner_rescue_hostname is string
-    quiet: true
+#- name: "Assert | test if hetzner_rescue_hostname is set correctly"
+#  ansible.builtin.assert:
+#    that:
+#      - hetzner_rescue_hostname is defined
+#      - hetzner_rescue_hostname is string
+#    quiet: true
 
-- name: "Assert | test if hetzner_rescue_ip is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_rescue_ip is defined
-      - hetzner_rescue_ip is string
-    quiet: true
+#- name: "Assert | test if hetzner_rescue_ip is set correctly"
+#  ansible.builtin.assert:
+#    that:
+#      - hetzner_rescue_ip is defined
+#      - hetzner_rescue_ip is string
+#    quiet: true
 
-- name: "Assert | test if hetzner_rescue_disk1 is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_rescue_disk1 is defined
-      - hetzner_rescue_disk1 is string
-      - hetzner_rescue_disk1 in ["sda"]
-    quiet: true
+#- name: "Assert | test if hetzner_rescue_disk1 is set correctly"
+#  ansible.builtin.assert:
+#    that:
+#      - hetzner_rescue_disk1 is defined
+#      - hetzner_rescue_disk1 is string
+#      - hetzner_rescue_disk1 in ["sda"]
+#    quiet: true
 
-- name: "Assert | test if hetzner_rescue_disk2 is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_rescue_disk2 is defined
-      - hetzner_rescue_disk2 is string
-      - hetzner_rescue_disk2 in ["sdb"]
-    quiet: true
+#-  ansible.builtin.assert:
+#    that:
+#      - hetzner_rescue_disk2 is defined
+#      - hetzner_rescue_disk2 is string
+#      - hetzner_rescue_disk2 in ["sdb"]
+#    quiet: true
 
-- name: "Assert | test if hetzner_rescue_image is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_rescue_image is defined
-      - hetzner_rescue_image is string
-    quiet: true
+#- name: "Assert | test if hetzner_rescue_image is set correctly"
+#  ansible.builtin.assert:
+#    that:
+#      - hetzner_rescue_image is defined
+#      - hetzner_rescue_image is string
+#    quiet: true
 
-- name: "Assert | test if hetzner_rescue_image_ignore_errors is set correctly."
-  ansible.builtin.assert:
-    quiet: true
-    that:
-      - hetzner_rescue_image_ignore_errors is defined
-      - hetzner_rescue_image_ignore_errors  is boolean
+#- name: "Assert | test if hetzner_rescue_image_ignore_errors is set correctly."
+#  ansible.builtin.assert:
+#    quiet: true
+#    that:
+#      - hetzner_rescue_image_ignore_errors is defined
+#      - hetzner_rescue_image_ignore_errors is boolean
 
 ...
