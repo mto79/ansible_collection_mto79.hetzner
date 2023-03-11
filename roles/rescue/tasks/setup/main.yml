@@ -1,4 +1,8 @@
 ---
+- name: "Setup | display message"
+  ansible.builtin.debug:
+    msg: "Setup role {{ hetzner_rescue_role_name }} for {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}"
+
 - name: "Setup | Retrieve first public key fingerprint"
   ansible.builtin.uri:
     url: "{{ hetzner_rescue_api_url }}/key"
@@ -8,151 +12,144 @@
     password: "{{ hetzner_rescue_api_password }}"
     force_basic_auth: yes
     status_code: 200
-  register: key
+  register: _hetzner_rescue_key
   delegate_to: localhost
 
 - name: "Setup | Set authorized_key fact"
   ansible.builtin.set_fact:
-    hetzner_rescue_authorized_key: "{{ key.json[0].key.fingerprint }}"
+    hetzner_rescue_authorized_key: "{{ _hetzner_rescue_key.json[0].key.fingerprint }}"
 
-- name: "Setup | Check rescue mode"
-  ansible.builtin.uri:
-    url: "{{ hetzner_rescue_api_url }}/boot/{{ hetzner_rescue_ip }}/rescue"
-    method: GET
-    user: "{{ hetzner_rescue_api_username }}"
-    password: "{{ hetzner_rescue_api_password }}"
-    force_basic_auth: yes
-    status_code: 200
-  register: _hetzner_rescue
-  delegate_to: localhost
+- name: "Setup | Display authorized_key fact"
+  ansible.builtin.debug:
+    var: hetzner_rescue_authorized_key
 
-- name: "Setup | Activate rescue mode"
-  when: not _hetzner_rescue.json.rescue.active
-  ansible.builtin.uri:
-    url: "{{ hetzner_rescue_api_url }}/boot/{{ hetzner_rescue_ip }}/rescue"
-    method: POST
-    user: "{{ hetzner_rescue_api_username }}"
-    password: "{{ hetzner_rescue_api_username }}"
-    force_basic_auth: yes
-    body: "os=linux&arch=64&authorized_key={{ hetzner_rescue_authorized_key }}"
-    status_code: 200
-    headers:
-      Content_Type: "application/x-www-form-urlencoded"
-  register: _hetzner_rescue_activated
-  delegate_to: localhost
+#- name: "Setup | Check rescue mode"
+#  ansible.builtin.uri:
+#    url: "{{ hetzner_rescue_api_url }}/boot/{{ hetzner_rescue_ip }}/rescue"
+#    method: GET
+#    user: "{{ hetzner_rescue_api_username }}"
+#    password: "{{ hetzner_rescue_api_password }}"
+#    force_basic_auth: yes
+#    status_code: 200
+#  register: _hetzner_rescue
+#  delegate_to: localhost
 
-- name: "Setup | Execute hardware reset"
-  ansible.builtin.uri:
-    url: "{{ hetzner_rescue_api_url }}/reset/{{ hetzner_rescue_ip }}"
-    method: POST
-    user: "{{ hetzner_rescue_api_username }}"
-    password: "{{ hetzner_rescue_api_password }}"
-    force_basic_auth: yes
-    body: "type=hw"
-    status_code: 200
-    headers:
-      Content-Type: "application/x-www-form-urlencoded"
-  delegate_to: localhost
+#- name: "Setup | Activate rescue mode"
+#  when: not _hetzner_rescue.json.rescue.active
+#  ansible.builtin.uri:
+#    url: "{{ hetzner_rescue_api_url }}/boot/{{ hetzner_rescue_ip }}/rescue"
+#    method: POST
+#    user: "{{ hetzner_rescue_api_username }}"
+#    password: "{{ hetzner_rescue_api_username }}"
+#    force_basic_auth: yes
+#    body: "os=linux&arch=64&authorized_key={{ hetzner_rescue_authorized_key }}"
+#    status_code: 200
+#    headers:
+#      Content_Type: "application/x-www-form-urlencoded"
+#  register: _hetzner_rescue_activated
+#  delegate_to: localhost
 
-- name: "Setup | Remove server from local known_hosts file"
-  ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ inventory_hostname }}"
-  register: _hetzner_rescue_output
-  failed_when: _hetzner_rescue_output.rc != 0
-  changed_when: '"updated" in _hetzner_rescue_output.stdout'
-  delegate_to: localhost
+#- name: "Setup | Execute hardware reset"
+#  ansible.builtin.uri:
+#    url: "{{ hetzner_rescue_api_url }}/reset/{{ hetzner_rescue_ip }}"
+#    method: POST
+#    user: "{{ hetzner_rescue_api_username }}"
+#    password: "{{ hetzner_rescue_api_password }}"
+#    force_basic_auth: yes
+#    body: "type=hw"
+#    status_code: 200
+#    headers:
+#      Content-Type: "application/x-www-form-urlencoded"
+#  delegate_to: localhost
 
-- name: "Setup | Pause a bit for the hardware reset to kick in"
-  ansible.builtin.pause: seconds=15
+#- name: "Setup | Remove server from local known_hosts file"
+#  ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ inventory_hostname }}"
+#  register: _hetzner_rescue_output
+#  failed_when: _hetzner_rescue_output.rc != 0
+#  changed_when: '"updated" in _hetzner_rescue_output.stdout'
+#  delegate_to: localhost
 
-- name: "Setup | Wait 300 seconds for port 22 to become open"
-  ansible.builtin.wait_for:
-    port: 22
-    host: '{{ inventory_hostname }}'
-    delay: 10
-    timeout: 300
-  connection: local
+#- name: "Setup | Pause a bit for the hardware reset to kick in"
+#  ansible.builtin.pause: seconds=15
 
-- name: "Setup | Ping rescue system"
-  ansible.builtin.ping:
-  retries: 10
-  delay: 1
+#- name: "Setup | Wait 300 seconds for port 22 to become open"
+#  ansible.builtin.wait_for:
+#    port: 22
+#    host: '{{ inventory_hostname }}'
+#    delay: 10
+#    timeout: 300
+#  connection: local
 
-- name: "Setup | Copy autosetup configuration file"
-  ansible.buitlin.template:
-    src: "templates/hetzner_rescue_autosetup.j2"
-    dest: /root/autosetup
-    owner: root
-    group: root
-    mode: 0644
+#- name: "Setup | Ping rescue system"
+#  ansible.builtin.ping:
+#  retries: 10
+#  delay: 1
 
-- name: "Setup | Run installimage"
-  ansible.builtin.command: "/root/.oldroot/nfs/install/installimage -a -c /root/autosetup"
-  environment:
-    TERM: "vt100"
-  register: _hetzner_rescue_result
-  changed_when: true
-  failed_when: false
+#- name: "Setup | Copy autosetup configuration file"
+#  ansible.buitlin.template:
+#    src: "templates/hetzner_rescue_autosetup.j2"
+#    dest: /root/autosetup
+#    owner: root
+#    group: root
+#    mode: 0644
 
-- name: "Setup | Print installimage output with -v"
-  debug:
-    var: _hetzner_rescue_result
-    verbosity: 1
+#- name: "Setup | Run installimage"
+#  ansible.builtin.command: "/root/.oldroot/nfs/install/installimage -a -c /root/autosetup"
+#  environment:
+#    TERM: "vt100"
+#  register: _hetzner_rescue_result
+#  changed_when: true
+#  failed_when: false
 
-- name: "Setup | Check stderr from installimage"
-  ansible.builtin.fail:
-    msg: "Something want wrong at installimage: {{ result.stderr_lines | join('\n') }}"
-  when:
-    - _hetzner_rescue_result.stderr_lines | length > 0
-    - not hetzner_rescue_image_ignore_errors
+#- name: "Setup | Print installimage output with -v"
+#  debug:
+#    var: _hetzner_rescue_result
+#    verbosity: 1
 
-- name: "Setup | Check stdout from installimage"
-  ansible.builtin.fail:
-    msg: "Something want wrong at installimage: {{ _hetzner_rescue_result.stdout_lines | join('\n') }}"
-  when:
-    - _hetzner_rescue_result.stdout is search('An error occured while installing the new system!')
-    - not hetzner_rescue_image_ignore_errors
+#- name: "Setup | Check stderr from installimage"
+#  ansible.builtin.fail:
+#    msg: "Something want wrong at installimage: {{ result.stderr_lines | join('\n') }}"
+#  when:
+#    - _hetzner_rescue_result.stderr_lines | length > 0
+#    - not hetzner_rescue_image_ignore_errors
 
-- name: "Setup | Reboot server"
-  ansible.builtin.shell: sleep 2 && shutdown -r now
-  async: 1
-  poll: 0
-  changed_when: true
-  failed_when: false
+#- name: "Setup | Check stdout from installimage"
+#  ansible.builtin.fail:
+#    msg: "Something want wrong at installimage: {{ _hetzner_rescue_result.stdout_lines | join('\n') }}"
+#  when:
+#    - _hetzner_rescue_result.stdout is search('An error occured while installing the new system!')
+#    - not hetzner_rescue_image_ignore_errors
 
-- name: "Setup | Remove server from local known_hosts file"
-  ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ inventory_hostname }}"
-  register: _hetzner_rescue_output
-  failed_when: _hetzner_rescue_output.rc != 0
-  changed_when: '"updated" in _hetzner_rescue_output.stdout'
-  delegate_to: localhost
+#- name: "Setup | Reboot server"
+#  ansible.builtin.shell: sleep 2 && shutdown -r now
+#  async: 1
+#  poll: 0
+#  changed_when: true
+#  failed_when: false
 
-- name: "Setup | Wait 300 seconds for port 22 to become open"
-  ansible.builtin.wait_for:
-    port: 22
-    host: '{{ inventory_hostname }}'
-    delay: 10
-    timeout: 300
-  connection: local
+#- name: "Setup | Remove server from local known_hosts file"
+#  ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ inventory_hostname }}"
+#  register: _hetzner_rescue_output
+#  failed_when: _hetzner_rescue_output.rc != 0
+#  changed_when: '"updated" in _hetzner_rescue_output.stdout'
+#  delegate_to: localhost
 
-- name: "Setup | Check ansible_python_interpreter"
-  ansible.builtin.ping:
-  register: _hetzner_rescue_rc
-  ignore_errors: true
+#- name: "Setup | Wait 300 seconds for port 22 to become open"
+#  ansible.builtin.wait_for:
+#    port: 22
+#    host: '{{ inventory_hostname }}'
+#    delay: 10
+#    timeout: 300
+#  connection: local
 
-- name: "Setup | Set ansible_python_interpreter to /usr/libexec/platform-python (RHEL 8)"
-  ansible.builtin.set_fact:
-    ansible_python_interpreter: /usr/libexec/platform-python
-  when: _hetzner_rescure_rc.failed
+#- name: "Setup | Check ansible_python_interpreter"
+#  ansible.builtin.ping:
+#  register: _hetzner_rescue_rc
+#  ignore_errors: true
 
-- name: "Setup | Disable password authentication"
-  ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^PasswordAuthentication yes'
-    line: 'PasswordAuthentication no'
-
-- name: "Setup | Restart sshd"
-  ansible.builtin.systemd:
-    name: sshd.service
-    state: restarted
+#- name: "Setup | Set ansible_python_interpreter to /usr/libexec/platform-python (RHEL 8)"
+#  ansible.builtin.set_fact:
+#    ansible_python_interpreter: /usr/libexec/platform-python
+#  when: _hetzner_rescure_rc.failed
 
 ...

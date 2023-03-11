@@ -18,7 +18,7 @@
   ansible.builtin.assert:
     that:
       - hetzner_rescue_api_username is defined
-      - hetzner_rescue_api_username is string
+      - hetzner_rescue_api_username is encrypted
     quiet: true
 
 - name: "Assert | test if hetzner_rescue_api_password is set correctly"
