@@ -1,0 +1,87 @@
+---
+- name: "Main | import assert/main.yml"
+  ansible.builtin.import_tasks: assert/main.yml
+  run_once: true
+  delegate_to: localhost
+
+- name: "Main | determine specific vars file"
+  ansible.builtin.set_fact: 
+     _hetzner_server_vars_file: "{{ lookup('ansible.builtin.first_found', find_vars) }}"
+  vars:
+    find_vars:
+      files:
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}.yml"
+        - "{{ ansible_facts.os_family | lower }}.yml"
+        - "{{ ansible_facts.system | lower }}.yml"
+        - "main.yml"
+      skip: true
+      paths:
+        - "vars"
+
+- name: "Main | include specific vars file"
+  ansible.builtin.include_vars: "{{ _hetzner_server_vars_file }}"
+  when: _hetzner_server_vars_file is defined
+
+- name: "Main | determine specific assert file"
+  ansible.builtin.set_fact: 
+     _hetzner_server_assert_file: "{{ lookup('ansible.builtin.first_found', find_vars) }}"
+  vars:
+    find_vars:
+      files:
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}.yml"
+        - "{{ ansible_facts.os_family | lower }}.yml"
+        - "{{ ansible_facts.system | lower }}.yml"
+        - "main.yml"
+      skip: true
+      paths:
+        - "assert"
+
+- name: "Main | include specific assert file"
+  ansible.builtin.include_vars: "{{ _hetzner_server_assert_file }}"
+  when: _hetzner_server_assert_file is defined
+
+- name: "Main | determine specific sshkeys file"
+  ansible.builtin.set_fact: 
+     _hetzner_server_sshkeys_file: "{{ lookup('ansible.builtin.first_found', find_vars) }}"
+  vars:
+    find_vars:
+      files:
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}.yml"
+        - "{{ ansible_facts.os_family | lower }}.yml"
+        - "{{ ansible_facts.system | lower }}.yml"
+        - "main.yml"
+      skip: true
+      paths:
+        - "sshkeys"
+
+- name: "Main | include specific assert file"
+  ansible.builtin.include_vars: "{{ _hetzner_server_sshkeys_file }}"
+  when: _hetzner_server_sshkeys_file is defined
+
+- name: "Main | determine specific rescue file"
+  ansible.builtin.set_fact: 
+     _hetzner_server_rescue_file: "{{ lookup('ansible.builtin.first_found', find_vars) }}"
+  vars:
+    find_vars:
+      files:
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_major_version }}.yml"
+        - "{{ ansible_facts.distribution | lower }}.yml"
+        - "{{ ansible_facts.os_family | lower }}.yml"
+        - "{{ ansible_facts.system | lower }}.yml"
+        - "main.yml"
+      skip: true
+      paths:
+        - "rescue"
+
+- name: "Main | include specific rescue file"
+  ansible.builtin.include_vars: "{{ _hetzner_server_rescue_file }}"
+  when: _hetzner_server_rescue_file is defined
+
+...

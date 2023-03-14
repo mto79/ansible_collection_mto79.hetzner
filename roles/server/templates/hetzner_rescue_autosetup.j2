@@ -1,9 +1,9 @@
-DRIVE1 /dev/{{ hetzner_rescue_disk1 }}
-DRIVE2 /dev/{{ hetzner_rescue_disk2 }}
+DRIVE1 /dev/{{ hetzner_server_disk1 }}
+DRIVE2 /dev/{{ hetzner_server_disk2 }}
 SWRAID 1
 SWRAIDLEVEL 0
 BOOTLOADER grub
-HOSTNAME {{ hetzner_rescue_hostname }}
+HOSTNAME {{ hetzner_server_hostname }}
 PART /boot ext3 512M
 PART lvm vg0 all
 
@@ -13,4 +13,4 @@ LV vg0 home   /home   ext4      40G
 LV vg0 var    /var ext4 50G
 LV vg0 libvirt /var/lib/libvirt/images xfs all
 
-IMAGE {{ hetzner_rescue_image }}
+IMAGE {{ hetzner_server_image }}
