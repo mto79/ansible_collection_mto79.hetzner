@@ -24,26 +24,6 @@
   ansible.builtin.include_vars: "{{ _hetzner_server_vars_file }}"
   when: _hetzner_server_vars_file is defined
 
-- name: "Main | determine specific assert file"
-  ansible.builtin.set_fact: 
-     _hetzner_server_assert_file: "{{ lookup('ansible.builtin.first_found', find_vars) }}"
-  vars:
-    find_vars:
-      files:
-        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_version }}.yml"
-        - "{{ ansible_facts.distribution | lower }}-{{ ansible_facts.distribution_major_version }}.yml"
-        - "{{ ansible_facts.distribution | lower }}.yml"
-        - "{{ ansible_facts.os_family | lower }}.yml"
-        - "{{ ansible_facts.system | lower }}.yml"
-        - "main.yml"
-      skip: true
-      paths:
-        - "assert"
-
-- name: "Main | include specific assert file"
-  ansible.builtin.include_vars: "{{ _hetzner_server_assert_file }}"
-  when: _hetzner_server_assert_file is defined
-
 - name: "Main | determine specific sshkeys file"
   ansible.builtin.set_fact: 
      _hetzner_server_sshkeys_file: "{{ lookup('ansible.builtin.first_found', find_vars) }}"
@@ -60,7 +40,7 @@
       paths:
         - "sshkeys"
 
-- name: "Main | include specific assert file"
+- name: "Main | include specific sshkeys file"
   ansible.builtin.include_vars: "{{ _hetzner_server_sshkeys_file }}"
   when: _hetzner_server_sshkeys_file is defined
 
