@@ -41,7 +41,7 @@
         - "sshkeys"
 
 - name: "Main | include specific sshkeys file"
-  ansible.builtin.include_vars: "{{ _hetzner_server_sshkeys_file }}"
+  ansible.builtin.include_tasks: "{{ _hetzner_server_sshkeys_file }}"
   when: _hetzner_server_sshkeys_file is defined
 
 - name: "Main | determine specific rescue file"
@@ -61,7 +61,7 @@
         - "rescue"
 
 - name: "Main | include specific rescue file"
-  ansible.builtin.include_vars: "{{ _hetzner_server_rescue_file }}"
+  ansible.builtin.include_tasks: "{{ _hetzner_server_rescue_file }}"
   when: _hetzner_server_rescue_file is defined
 
 ...
