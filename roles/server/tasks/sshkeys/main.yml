@@ -1,9 +1,9 @@
 ---
-- name: "SSHKeys | display message"
+- name: "HETZNER ROBOT | SSH key management"
   ansible.builtin.debug:
-    msg: "Setup role {{ hetzner_server_role_name }} for {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}"
+    msg: "SSH key management in {{ hetzner_server_role_name }}"
 
-- name: "SSHKeys | Retrieve first public key fingerprint"
+- name: "HETZNER ROBOT | SSH key management | Retrieve first public key fingerprint"
   ansible.builtin.uri:
     url: "{{ hetzner_server_api_url }}/key"
     return_content: yes
@@ -15,7 +15,7 @@
   register: _hetzner_server_key
   delegate_to: localhost
 
-- name: "SsHkeys | Set authorized_key fact"
+- name: "HETZNER ROBOT | SSH key management | Set authorized_key fact"
   ansible.builtin.set_fact:
     hetzner_server_authorized_key: "{{ _hetzner_server_key.json[0].key.fingerprint }}"
 
