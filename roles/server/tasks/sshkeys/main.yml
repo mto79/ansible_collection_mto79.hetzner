@@ -13,7 +13,15 @@
     force_basic_auth: yes
     status_code: 200
   register: _hetzner_server_key
+  ignore_errors: true
   delegate_to: localhost
+
+- name: "HETZNER ROBOT | SSH key management | Add key when no keys are found"
+  when: _hetzner_server_key.json | length == 0
+  ansible.builtin.debug:
+    msg: "No SSH keys found, adding key"
+
+
 
 - name: "HETZNER ROBOT | SSH key management | Set authorized_key fact"
   ansible.builtin.set_fact:
