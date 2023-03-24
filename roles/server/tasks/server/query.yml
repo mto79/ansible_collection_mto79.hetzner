@@ -1,0 +1,19 @@
+---
+- name: "HETZNER ROBOT | Server | Query servers"
+  ansible.builtin.debug:
+    msg: "Server in {{ hetzner_server_role_name }}"
+
+- name: "HETZNER ROBOT | Server | Query servers | Retrieve servers"
+  ansible.builtin.uri:
+    url: "{{ hetzner_server_api_url }}/server"
+    return_content: yes
+    method: GET
+    user: "{{ hetzner_server_api_username }}"
+    password: "{{ hetzner_server_api_password }}"
+    force_basic_auth: yes
+    status_code: 200
+  register: _hetzner_server_query
+  ignore_errors: true
+  delegate_to: localhost
+
+...
