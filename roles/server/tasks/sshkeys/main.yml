@@ -17,7 +17,7 @@
   delegate_to: localhost
 
 - name: "HETZNER ROBOT | SSH key management | Add key when no keys are found"
-  when: _hetzner_server_key.json | length == 0
+  when: _hetzner_server_key.json.error.code == "NOT_FOUND"
   ansible.builtin.debug:
     msg: "No SSH keys found, adding key"
 
