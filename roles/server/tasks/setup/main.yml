@@ -1,0 +1,37 @@
+---
+- name: Set ansible_facts required by role
+  ansible.builtin.include_tasks: 
+    file: "{{ role_path }}/tasks/server/set_vars.yml" 
+
+- name: Assert role variables
+  ansible.builtin.include_tasks: 
+    file: "{{ role_path }}/tasks/server/assert_vars.yml"
+
+- name: Set platform/version specific tasks"
+  ansible.builtin.set_fact:
+    hetzner_server_task_file: "{{ lookup('ansible.builtin.first_found', ffparams) }}"
+  vars:
+    ffparams:
+      files:
+        - "{{ ansible_facts['distribution'] | lower }}_\
+          {{ ansible_facts['distribution_version'] }}_server.yml"
+        - "{{ ansible_facts['distribution'] | lower }}_\
+          {{ ansible_facts['distribution_major_version'] | lower }}_server.yml"
+        - "{{ ansible_facts['distribution'] | lower }}_server.yml"
+        - "{{ ansible_facts['os_family'] | lower }}_server.yml"
+        - "generic.yml"
+      skip: true
+      paths:
+        - "{{ role_path }}/tasks/server/setup"
+  when:
+    - ansible_facts['distribution'] is defined
+    - ansible_facts['distribution_version'] is defined
+    - ansible_facts['distribution_major_version'] is defined
+    - ansible_facts['os_family'] is defined
+
+- name: "Main | include tasks for setup"
+  ansible.builtin.include_tasks: 
+    file: "{{ role_path }}/tasks/server/{{ hetzner_server_task_file }}.yml"
+  when: hetzner_server_task_file is defined
+
+...

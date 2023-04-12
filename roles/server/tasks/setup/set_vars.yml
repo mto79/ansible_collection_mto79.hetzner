@@ -11,15 +11,20 @@
     ffparams:
       files:
         - "{{ ansible_facts['distribution'] | lower }}_\
-          {{ ansible_facts['distribution_version'] }}_server.yml"
+          {{ ansible_facts['distribution_version'] }}_setup.yml"
         - "{{ ansible_facts['distribution'] | lower }}_\
-          {{ ansible_facts['distribution_major_version'] | lower }}_server.yml"
-        - "{{ ansible_facts['distribution'] | lower }}_server.yml"
-        - "{{ ansible_facts['os_family'] | lower }}_server.yml"
-        - "server.yml"
-      #skip: true
+          {{ ansible_facts['distribution_major_version'] | lower }}_setup.yml"
+        - "{{ ansible_facts['distribution'] | lower }}_setup.yml"
+        - "{{ ansible_facts['os_family'] | lower }}_setup.yml"
+        - "setup.yml"
+      skip: true
       paths:
         - "{{ role_path }}/vars"
+  when:
+    - ansible_facts['distribution'] is defined
+    - ansible_facts['distribution_version'] is defined
+    - ansible_facts['distribution_major_version'] is defined
+    - ansible_facts['os_family'] is defined
 
 
 ...

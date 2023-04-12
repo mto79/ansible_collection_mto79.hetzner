@@ -1,6 +1,0 @@
----
-- name: "HETZNER ROBOT | Server | Remove servers"
-  ansible.builtin.debug:
-    msg: "Remove Server in {{ hetzner_server_role_name }}"
-
-...
