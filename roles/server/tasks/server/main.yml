@@ -1,6 +1,6 @@
 ---
 - name: Set ansible_facts required by role
-  ansible.builtin.include_tasks: "{{ role_path }}/tasks/server/set_facts.yml }}" 
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/server/set_facts.yml" 
 
 #- name: Assert role variables
 #  ansible.builtin.include_tasks: 
