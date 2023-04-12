@@ -1,13 +1,10 @@
 ---
 - name: Set ansible_facts required by role
-  ansible.builtin.include_tasks: 
-    file: set_vars.yml
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/server/set_facts.yml }}" 
 
-- name: Assert role variables
-  ansible.builtin.include_tasks: 
-    file: assert.yml 
+#- name: Assert role variables
+#  ansible.builtin.include_tasks: 
 
-- name: Select server
-  ansible.builtin.include_tasks:
-    file: select_server.yml
+#- name: Select server
+#  ansible.builtin.include_tasks:
 ...
