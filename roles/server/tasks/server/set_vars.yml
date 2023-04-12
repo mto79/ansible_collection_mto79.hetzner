@@ -1,0 +1,25 @@
+---
+#- name: Ensure ansible_facts used by role
+#  ansible.builtin.setup:
+#    gather_subset: min
+#  when: not ansible_facts.keys() | list |
+#    intersect(__hetzner_server_required_facts) == __hetzner_server_required_facts
+
+- name: Set platform/version specific variables
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', ffparams) }}"
+  vars:
+    ffparams:
+      files:
+        - "{{ ansible_facts['distribution'] | lower }}_\
+          {{ ansible_facts['distribution_version'] }}_server.yml"
+        - "{{ ansible_facts['distribution'] | lower }}_\
+          {{ ansible_facts['distribution_major_version'] | lower }}_server.yml"
+        - "{{ ansible_facts['distribution'] | lower }}_server.yml"
+        - "{{ ansible_facts['os_family'] | lower }}_server.yml"
+        - "server.yml"
+      #skip: true
+      paths:
+        - "{{ role_path }}/vars"
+
+
+...

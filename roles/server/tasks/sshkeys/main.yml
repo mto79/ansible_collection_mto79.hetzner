@@ -18,8 +18,11 @@
 
 - name: "HETZNER ROBOT | SSH key management | Add key when no keys are found"
   when: _hetzner_server_key.json.error.code == "NOT_FOUND"
-  ansible.builtin.debug:
-    msg: "No SSH keys found, adding key"
+  block:
+    - ansible.builtin.debug:
+      msg: "No SSH keys found, adding key"
+    
+     
 
 
 

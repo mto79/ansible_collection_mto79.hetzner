@@ -1,0 +1,31 @@
+---
+- name: "Assert | test if hetzner_server_role_name is set correctly"
+  ansible.builtin.assert:
+    that:
+      - hetzner_server_role_name is defined
+      - hetzner_server_role_name is string
+      - hetzner_server_role_name in ["hetzner_server"]
+    quiet: true
+
+- name: "Assert | test if hetzner_server_api_url is set correctly"
+  ansible.builtin.assert:
+    that:
+      - hetzner_server_api_url is defined
+      - hetzner_server_api_url is string
+    quiet: true
+
+- name: "Assert | test if hetzner_server_api_username is set correctly"
+  ansible.builtin.assert:
+    that:
+      - hetzner_server_api_username is defined
+      - hetzner_server_api_username is vault_encrypted
+    quiet: true
+
+- name: "Assert | test if hetzner_server_api_password is set correctly"
+  ansible.builtin.assert:
+    that:
+      - hetzner_server_api_password is defined
+      - hetzner_server_api_password is vault_encrypted
+    quiet: true
+
+...
