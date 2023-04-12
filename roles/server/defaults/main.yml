@@ -11,4 +11,6 @@ hetzner_server_image: "/root/.oldroot/nfs/install/../images/CentOS-80-stream-amd
 #hetzner_server_image_ignore_errors: false
 #ansible_python_interpreter: /usr/bin/python3  # target host python interpreter
 
+hetzner_server_action: "select"
+
 ...

@@ -11,5 +11,12 @@
 - name: Select server
   ansible.builtin.include_tasks: 
     file: "{{ role_path }}/tasks/server/select_server.yml"
+  when:
+    - hetzner_server_action == "select" 
 
+- name: Remove server
+  ansible.builtin.include_tasks: 
+    file: "{{ role_path }}/tasks/server/remove_server.yml"
+  when:
+    - hetzner_server_action == "remove"
 ...
