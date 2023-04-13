@@ -45,7 +45,7 @@
   delegate_to: localhost
 
 - name: "Setup | Retrieve current setup of {{ hetzner_servere_ip }}"
-  ansible.builtin.gather_faicts:
+  ansible.builtin.gather_facts:
   register: _hetzner_server_host_facts
   delegate_to: "{{ hetzner_server_ip }}"
 
