@@ -52,6 +52,6 @@
         - "main.yml"
       skip: true
       paths:
-        - "{{ _hetzner_server_role_action }}"
+        - "{{ role_action }}"
 
 ...
