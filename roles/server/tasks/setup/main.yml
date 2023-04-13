@@ -67,9 +67,9 @@
   register: _hetzner_server_rescue
   delegate_to: localhost
 
-- name: "Display rescue mode"
+- name: "Setup | Display rescue mode"
   ansible.builtin.debug:
-    msg: "Rescue mode is {{ _hetzner_server_rescue.json.rescue }}"
+    msg: "Rescue mode is {{ _hetzner_server_rescue.json.rescue.active }}"
   delegate_to: localhost
 
 
