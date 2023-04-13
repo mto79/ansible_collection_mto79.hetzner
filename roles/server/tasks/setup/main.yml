@@ -1,8 +1,4 @@
 ---
-- name: "Setup | Query servers"
-  ansible.builtin.debug:
-    msg: "Setup Hetzner server in {{ hetzner_server_role_name }}"
-
 - name: "Setup | Retrieve servers"
   ansible.builtin.uri:
     url: "{{ hetzner_server_api_url }}/server"
