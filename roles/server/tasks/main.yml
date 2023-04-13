@@ -38,6 +38,11 @@
       paths:
         - "assert"
 
+- name: Debug role_action
+  ansible.builtin.debug:
+    msg: "{{ role_action }}"
+
+
 - name: "Main | platform/version specific playbooks"
   ansible.builtin.include_tasks: "{{ lookup('ansible.builtin.first_found', find_playbooks) }}"
   vars:
