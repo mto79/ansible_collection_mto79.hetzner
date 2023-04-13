@@ -1,5 +1,4 @@
 ---
-hetzner_server_role_name: "hetzner_server"
 hetzner_server_api_url: "https://robot-ws.your-server.de"
 #hetzner_server_api_username:           # see Hetzner Robot -> Settings -> Webservice
 #hetzner_server_api_password:

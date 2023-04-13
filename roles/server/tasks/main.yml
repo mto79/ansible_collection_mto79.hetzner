@@ -1,10 +1,9 @@
 ---
-
 - name: "Main | Ensure ansible_facts used by role"
   ansible.builtin.setup:
     gather_subset: min
   when: not ansible_facts.keys() | list |
-    intersect(_hetzner_server_required_facts) == _hetzner_server_required_facts
+    intersect(__role_required_facts) == __role_required_facts
 
 - name: "Main | Set platform/version specific variables"
   ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', find_vars) }}"
@@ -38,10 +37,9 @@
       paths:
         - "assert"
 
-#- name: Debug role_action
-#  ansible.builtin.debug:
-#    msg: "{{ role_action }}"
-
+- name: "Main | Display role action"
+  ansible.builtin.debug:
+    msg: "Executing action: {{ __role_action }} in role: {{ __role_name }}"
 
 - name: "Main | platform/version specific playbooks"
   ansible.builtin.include_tasks: "{{ lookup('ansible.builtin.first_found', find_playbooks) }}"
@@ -57,6 +55,6 @@
         - "main.yml"
       skip: true
       paths:
-        - "{{ role_action }}"
+        - "{{ __role_action }}"
 
 ...
