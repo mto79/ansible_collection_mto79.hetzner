@@ -7,50 +7,62 @@
   community.hrobot.server_info:
     hetzner_user: "{{ hetzner_server_api_username }}"
     hetzner_password: "{{ hetzner_server_api_password }}"
-  register: result
+  register: _hetzner_server_servers_result
 
 - name: "Setup | Display all servers"
   ansible.builtin.debug:
-    msg: "{{ result.servers }}"
-
-- name: "Setup | Retrieve servers from Hetzner Robot API"
-  ansible.builtin.include_tasks: 
-    file: "api.yml"
-  vars:
-    hetzner_server_api_action: "server"
-    hetzner_server_api_method: "GET"
+    msg: "{{ _hetzner_server_servers_result.servers }}"
 
 - name: "Setup | Select Hetzner Server"
   ansible.builtin.pause:
     prompt: |
-      {% for _hetzner_server in _hetzner_server_api_result.json %}
+      {% for _hetzner_server in __hetzner_server_servers_result.servers %}
       {{ loop.index0 }} => {{ _hetzner_server.server.server_number }} - {{ _hetzner_server.server.server_ip }}
       {% endfor %}
       Select your Hetzner server, by entering the number
   register: _hetzner_server_selection
   delegate_to: localhost
 
-- name: "Setup | Test if selection is correct"
-  ansible.builtin.assert:
-    that:
-      - _hetzner_server_selection is defined
-      - _hetzner_server_selection.user_input | int >= 0
-      - _hetzner_server_selection.user_input | int < _hetzner_server_api_result.json | count
-    fail_msg: "Please select an existing Hetzner server"
-    success_msg: "Hetzner server selected"
-    quiet: false
-  delegate_to: localhost
 
-- name: "Setup | Set hetzner_server_ip"
-  ansible.builtin.set_fact:
-    hetzner_server_ip: "{{ _hetzner_server_api_result.json[_hetzner_server_selection.user_input | int].server.server_ip }}"
-    hetzner_server_number: "{{ _hetzner_server_api_result.json[_hetzner_server_selection.user_input | int].server.server_number }}"
-  delegate_to: localhost
 
-- name: "Setup | Display selected server"
-  ansible.builtin.debug:
-    msg: "Selected server {{ hetzner_server_number }} with IP {{ hetzner_server_ip }}"
-  delegate_to: localhost
+#- name: "Setup | Retrieve servers from Hetzner Robot API"
+#  ansible.builtin.include_tasks: 
+#    file: "api.yml"
+#  vars:
+#    hetzner_server_api_action: "server"
+#    hetzner_server_api_method: "GET"
+
+#- name: "Setup | Select Hetzner Server"
+#  ansible.builtin.pause:
+#    prompt: |
+#      {% for _hetzner_server in _hetzner_server_api_result.json %}
+#      {{ loop.index0 }} => {{ _hetzner_server.server.server_number }} - {{ _hetzner_server.server.server_ip }}
+#      {% endfor %}
+#      Select your Hetzner server, by entering the number
+#  register: _hetzner_server_selection
+#  delegate_to: localhost
+
+#- name: "Setup | Test if selection is correct"
+#  ansible.builtin.assert:
+#    that:
+#      - _hetzner_server_selection is defined
+#      - _hetzner_server_selection.user_input | int >= 0
+#      - _hetzner_server_selection.user_input | int < _hetzner_server_api_result.json | count
+#    fail_msg: "Please select an existing Hetzner server"
+#    success_msg: "Hetzner server selected"
+#    quiet: false
+#  delegate_to: localhost
+
+#- name: "Setup | Set hetzner_server_ip"
+#  ansible.builtin.set_fact:
+#    hetzner_server_ip: "{{ _hetzner_server_api_result.json[_hetzner_server_selection.user_input | int].server.server_ip }}"
+#    hetzner_server_number: "{{ _hetzner_server_api_result.json[_hetzner_server_selection.user_input | int].server.server_number }}"
+#  delegate_to: localhost
+
+#- name: "Setup | Display selected server"
+#  ansible.builtin.debug:
+#    msg: "Selected server {{ hetzner_server_number }} with IP {{ hetzner_server_ip }}"
+#  delegate_to: localhost
 
 - name: "Setup | List all SSH keys"
   community.hrobot.ssh_key_info:
