@@ -42,7 +42,7 @@
     msg: "Executing action: {{ __role_action }} in role: {{ __role_name }}"
 
 - name: "Main | platform/version specific playbooks"
-  ansible.builtin.include_tasks: "{{ lookup('ansible.builtin.first_found', find_playbooks) | list }}"
+  ansible.builtin.include_tasks: "{{ lookup('ansible.builtin.first_found', find_playbooks) | string }}"
   vars:
     find_playbooks:
       files:
@@ -55,7 +55,8 @@
         - "default.yml"
       skip: true
       paths:
-        - "{{ __role_action }}"
+        - "{{ item }}"
+  loop: "{{ __role_action }}" 
 
 #- name: "Main | include tasks for setup"
 #  ansible.builtin.include_tasks: "{{ __role_tasks }}"
