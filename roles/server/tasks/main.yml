@@ -52,7 +52,7 @@
       skip: true
       paths: 
         - "tasks/{{ __role_action_task }}"
-  loop: "{{ (__role_action | list ) | default(['setup']) }}"
+  loop: "{{ [__role_action | default('setup')] | flatten }}"
   loop_control:
     loop_var: __role_action_task 
 
