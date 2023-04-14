@@ -9,13 +9,11 @@
   ansible.builtin.uri:
     url: "{{ hetzner_server_api_url }}/{{ hetzner_server_api_action }}"
     return_content: true
-    headers:
-      Content-Type: "application/x-www-form-urlencoded"
     method: "{{ hetzner_server_api_method | default('GET') }}"
     user: "{{ hetzner_server_api_username }}"
     password: "{{ hetzner_server_api_password }}"
     body_format: "{{ hetzner_server_api_body_format | default('raw') }}"
-    body: "{{ hetzner_server_api_body | default(omit) }}"
+    headers: "{{ hetzner_server_api_body | default(omit) }}"
     force_basic_auth: true
     status_code: 200
     timeout: 5
