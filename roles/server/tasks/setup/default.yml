@@ -1,16 +1,11 @@
 ---
-- name: "Setup | Retrieve servers"
-  ansible.builtin.uri:
-    url: "{{ hetzner_server_api_url }}/server"
-    return_content: yes
-    method: GET
-    user: "{{ hetzner_server_api_username }}"
-    password: "{{ hetzner_server_api_password }}"
-    force_basic_auth: yes
-    status_code: 200
-  register: _hetzner_server_query
-  ignore_errors: true
-  delegate_to: localhost
+- name: "Setup | Retrieve servers from Hetzner Robot API"
+  ansible.builtin.include_tasks: 
+    file: "api.yml"
+  vars:
+    hetzner_server_api_action: "server"
+    hetzner_server_api_method: "GET"
+  register: _hetzner_servers_query 
 
 - name: "Setup | Select Hetzner Server"
   ansible.builtin.pause:
