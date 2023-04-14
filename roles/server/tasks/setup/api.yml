@@ -9,6 +9,8 @@
   ansible.builtin.uri:
     url: "{{ hetzner_server_api_url }}/{{ hetzner_server_api_action }}"
     return_content: true
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
     method: "{{ hetzner_server_api_method | default('GET') }}"
     user: "{{ hetzner_server_api_username }}"
     password: "{{ hetzner_server_api_password }}"
