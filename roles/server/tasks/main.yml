@@ -52,10 +52,12 @@
           {{ ansible_facts['distribution_major_version'] }}.yml"
         - "{{ (ansible_facts['distribution'] | lower) | replace(' ', '_') }}.yml"
         - "{{ ansible_facts['os_family'] | lower }}.yml"
-        - "{{ item }}/default.yml"
+        - "{{zz_item }}/default.yml"
       skip: true
 #      paths: "{{ item }}"
-  loop: "{{ __role_action }}" 
+  loop: "{{ __role_action }}"
+  loop_control:
+    loop_var: zz_item 
 
 #- name: "Main | include tasks for setup"
 #  ansible.builtin.include_tasks: "{{ __role_tasks }}"
