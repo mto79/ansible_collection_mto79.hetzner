@@ -52,9 +52,9 @@
           {{ ansible_facts['distribution_major_version'] }}.yml"
         - "{{ (ansible_facts['distribution'] | lower) | replace(' ', '_') }}.yml"
         - "{{ ansible_facts['os_family'] | lower }}.yml"
-        - "default.yml"
+        - "{{ item }}/default.yml"
       skip: true
-      paths: "{{ item }}"
+#      paths: "{{ item }}"
   loop: "{{ __role_action }}" 
 
 #- name: "Main | include tasks for setup"
