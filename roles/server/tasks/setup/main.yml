@@ -46,7 +46,7 @@
 
 - name: "Setup | Retrieve ssh keys from Hetzner Robot API"
   ansible.builtin.include_tasks: 
-    file: "api.yml"
+    file: "{{ role_path }}/api.yml"
   vars:
     hetzner_server_api_action: "key"
     hetzner_server_api_method: "GET"
