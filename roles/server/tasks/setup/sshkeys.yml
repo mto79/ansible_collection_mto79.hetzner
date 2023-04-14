@@ -46,6 +46,8 @@
       Select your ssh key, by entering the number
   register: _hetzner_server_key_selection
   delegate_to: localhost
+  when:
+    - _hetzner_server_ssh_keys.ssh_keys | count > 0
 
 - name: "Setup | Test if selection is correct"
   ansible.builtin.assert:
@@ -57,6 +59,8 @@
     success_msg: "Hetzner SSH Key selected"
     quiet: false
   delegate_to: localhost
+  when:
+    - _hetzner_server_ssh_keys.ssh_keys | count > 0
 
 - name: "Setup | Set authorized_key fact"
   ansible.builtin.set_fact:
