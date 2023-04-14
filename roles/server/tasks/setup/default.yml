@@ -21,7 +21,7 @@
     that:
       - _hetzner_server_selection is defined
       - _hetzner_server_selection.user_input | int >= 0
-      - _hetzner_server_selection.user_input | int < _hetzner_server_query.json | count
+      - _hetzner_server_selection.user_input | int < _hetzner_server_api_result.json | count
     fail_msg: "Please select an existing Hetzner server"
     success_msg: "Hetzner server selected"
     quiet: false
