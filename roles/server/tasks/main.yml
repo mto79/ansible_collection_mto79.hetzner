@@ -56,12 +56,8 @@
       skip: true
       paths: 
         - "tasks/{{ __role_action_task }}"
-  loop: "{{ __role_action }}"
+  loop: "{{ __role_action | default(['setup']) | list }}"
   loop_control:
     loop_var: __role_action_task 
-
-#- name: "Main | include tasks for setup"
-#  ansible.builtin.include_tasks: "{{ __role_tasks }}"
-#  when: __role_tasks is defined
 
 ...
