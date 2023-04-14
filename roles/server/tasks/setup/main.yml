@@ -44,6 +44,33 @@
     msg: "Selected server {{ hetzner_server_number }} with IP {{ hetzner_server_ip }}"
   delegate_to: localhost
 
+- name: "Setup | Retrieve ssh keys"
+  ansible.builtin.uri:
+    url: "{{ hetzner_server_api_url }}/key"
+    return_content: yes
+    method: GET
+    user: "{{ hetzner_server_api_username }}"
+    password: "{{ hetzner_server_api_password }}"
+    force_basic_auth: yes
+    status_code: 200
+  register: _hetzner_servers_keys
+  delegate_to: localhost
+  
+- name: "Setup | Debug _hetzner_servers_keys"
+  ansible.builtin.debug:
+    msg: "{{ _hetzner_servers_keys.json }}"
+  delegate_to: localhost
+
+- name: "Setup | Select ssh key"
+  ansible.builtin.pause:
+    prompt: |
+      {% for _hetzner_server_key in _hetzner_servers_keys.json %}
+      {{ loop.index0 }} => {{ _hetzner_server_key.key.name }}
+      {% endfor %}
+      Select your ssh key, by entering the number
+  register: _hetzner_server_key_selection
+  delegate_to: localhost
+
 #- name: "Setup | Retrieve current setup of {{ hetzner_server_ip }}"
 #  ansible.builtin.gather_facts:
 #  register: _hetzner_server_host_facts
