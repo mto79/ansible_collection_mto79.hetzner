@@ -1,10 +1,4 @@
 ---
-
-- name: "Setup | Debug hetzner_server_api_body"
-  ansible.builtin.debug:
-    msg: "{{ hetzner_server_api_body }}"
-  when: hetzner_server_api_body is defined
-
 - name: "Api | Query Hetzner API"
   ansible.builtin.uri:
     url: "{{ hetzner_server_api_url }}/{{ hetzner_server_api_action }}"
