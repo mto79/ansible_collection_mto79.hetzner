@@ -58,7 +58,7 @@
 
 - name: Show how many keys were found
   ansible.builtin.debug:
-    msg: "Found {{ _hetzner_server_ssh_keys.ssh_keys | length }} keys"
+    msg: "Found {{ _hetzner_server_ssh_keys.ssh_keys }}"
 
 
 #- name: "Setup | Select ssh key"
