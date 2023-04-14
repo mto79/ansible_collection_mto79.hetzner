@@ -36,6 +36,7 @@
 - name: Show how many keys were found
   ansible.builtin.debug:
     msg: "Found {{ _hetzner_server_ssh_keys.ssh_keys | count }} ssh keys"
+  fail_when: (_hetzner_server_ssh_keys.ssh_keys | count) | int == 0
 
 - name: "Setup | Select ssh key"
   ansible.builtin.pause:
