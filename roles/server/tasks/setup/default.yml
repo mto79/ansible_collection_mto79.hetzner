@@ -44,10 +44,6 @@
     msg: "Selected server {{ hetzner_server_number }} with IP {{ hetzner_server_ip }}"
   delegate_to: localhost
 
-- name: "Debug"
-  ansible.builtin.debug:
-    msg: "{{ role_path }}/api.yml"
-
 - name: "Setup | Retrieve ssh keys from Hetzner Robot API"
   ansible.builtin.include_tasks: 
     file: "api.yml"
