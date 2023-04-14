@@ -54,8 +54,7 @@
         - "{{ ansible_facts['os_family'] | lower }}.yml"
         - "default.yml"
       skip: true
-      paths:
-        - "{{ item }}"
+      paths: "{{ item }}"
   loop: "{{ __role_action }}" 
 
 #- name: "Main | include tasks for setup"
