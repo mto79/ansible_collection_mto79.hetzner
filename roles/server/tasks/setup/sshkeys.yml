@@ -45,7 +45,7 @@
       ansible.builtin.pause:
         prompt: |
           {% for _hetzner_server_key in _hetzner_server_ssh_keys.ssh_keys %}
-          {{ loop.index0 }} => {{ _hetzner_server_key.name }}
+          {{ loop.index0 }} => {{ _hetzner_server_key.name }} - {{ _hetzner_server_key.data }}
           {% endfor %}
           Select your ssh key, by entering the number
       register: _hetzner_server_key_selection
@@ -56,7 +56,7 @@
         that:
           - _hetzner_server_key_selection is defined
           - _hetzner_server_key_selection.user_input | int >= 0
-          - _hetzner_server_Key_selection.user_input | int < _hetzner_server_ssh_keys.ssh_keys | count
+          - _hetzner_server_key_selection.user_input | int < _hetzner_server_ssh_keys.ssh_keys | count
         fail_msg: "Please select an Hetzner SSH Key"
         success_msg: "Hetzner SSH Key selected"
         quiet: false
