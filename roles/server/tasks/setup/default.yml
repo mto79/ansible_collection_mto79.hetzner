@@ -16,7 +16,7 @@
 - name: "Setup | Select Hetzner Server"
   ansible.builtin.pause:
     prompt: |
-      {% for _hetzner_server in __hetzner_server_servers_result.servers %}
+      {% for _hetzner_server in _hetzner_server_servers_result.servers %}
       {{ loop.index0 }} => {{ _hetzner_server.server.server_number }} - {{ _hetzner_server.server.server_ip }}
       {% endfor %}
       Select your Hetzner server, by entering the number
