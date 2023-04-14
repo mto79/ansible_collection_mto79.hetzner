@@ -9,7 +9,7 @@
     force_basic_auth: true
     status_code: 200
     timeout: 5
-  register: _hetzner_servers_api_result
+  register: _hetzner_server_api_result
   delegate_to: localhost
   ignore_errors: true 
 
@@ -18,22 +18,22 @@
     # Check if the request was successful (200 status code)
     - ansible.builtin.assert:
         that:
-          - "_hetzner_servers_api_result.status == 200"
+          - "_hetzner_server_api_result.status == 200"
         success_msg: "HTTP request successful"
-        fail_msg: "HTTP request failed with status {{ _hetzner_servers_api_result.status }}"
+        fail_msg: "HTTP request failed with status {{ _hetzner_server_api_result.status }}"
     # Handle other HTTP errors
     - ansible.builtin.fail:
-        msg: "HTTP request failed with status {{ _hetzner_servers_api_result.status }}"
-      when: "_hetzner_servers_api_result.status not in [200, 201, 202, 204, 206]"
+        msg: "HTTP request failed with status {{ _hetzner_server_api_result.status }}"
+      when: "_hetzner_server_api_result.status not in [200, 201, 202, 204, 206]"
 
   rescue:
     # Handle exceptions and errors
     - ansible.builtin.fail:
-        msg: "HTTP request failed: {{ _hetzner_servers_api_result.msg }}"
+        msg: "HTTP request failed: {{ _hetzner_server_api_result.msg }}"
 
-#- name: "Api | Set result"
-#  ansible.builtin.set_fact:
-#    _hetzner_server_api_result: "{{ _hetzner_servers_api_result }}"
-#  when: "_hetzner_servers_api_result.status == 200"
+- name: "Api | Set result"
+  ansible.builtin.set_fact:
+    _hetzner_server_api_result: "{{ _hetzner_servers_api_result }}"
+  when: "_hetzner_servers_api_result.status == 200"
 
 ...
