@@ -10,6 +10,9 @@
 - name: "Setup | Display infor selected server"
   ansible.builtin.debug:
     msg: "Selected server {{ hetzner_server_number }} with IP {{ hetzner_server_ip }} and authorized_key {{ hetzner_server_authorized_key }}"
+  failed_when: hetzner_server_number is not defined or hetzner_server_number == "" or 
+      hetzner_server_ip is not defined or hetzner_server_ip == "" or 
+      hetzner_server_authorized_key is not defined or hetzner_server_authorized_key == ""
   delegate_to: localhost
 
 #- name: "Setup | Retrieve current setup of {{ hetzner_server_ip }}"
