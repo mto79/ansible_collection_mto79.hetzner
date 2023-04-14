@@ -7,11 +7,10 @@
   ansible.builtin.include_tasks: 
     file: "servers.yml"
 
-
-#- name: "Setup | Display infor selected server"
-#  ansible.builtin.debug:
-#    msg: "Selected server {{ hetzner_server_number }} with IP {{ hetzner_server_ip }} and key"
-#  delegate_to: localhost
+- name: "Setup | Display infor selected server"
+  ansible.builtin.debug:
+    msg: "Selected server {{ hetzner_server_number }} with IP {{ hetzner_server_ip }} and fingerprint {{ hetzner_server_fingerprint }}"
+  delegate_to: localhost
 
 #- name: "Setup | Retrieve current setup of {{ hetzner_server_ip }}"
 #  ansible.builtin.gather_facts:
