@@ -54,7 +54,8 @@
         - "{{ ansible_facts['os_family'] | lower }}.yml"
         - "{{zz_item }}/default.yml"
       skip: true
-#      paths: "{{ item }}"
+      paths: 
+        - "tasks"
   loop: "{{ __role_action }}"
   loop_control:
     loop_var: zz_item 
