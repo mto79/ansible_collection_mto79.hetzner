@@ -36,5 +36,5 @@
     # Handle exceptions and errors
     - ansible.builtin.fail:
         msg: "HTTP request failed: {{ _hetzner_servers_api_result.msg }}"
-
+  ignore_errors: true 
 ...

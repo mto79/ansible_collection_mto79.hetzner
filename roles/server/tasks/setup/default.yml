@@ -52,10 +52,6 @@
     hetzner_server_api_method: "GET"
   register: _hetzner_servers_keys 
 
-- name: "Setup | Display ssh keys"
-  ansible.builtin.debug:
-    msg: "{{ _hetzner_servers_keys }}"
-
 #- name: "Setup | Select ssh key"
 #  ansible.builtin.pause:
 #    prompt: |
@@ -78,21 +74,21 @@
 #    - _hetzner_server_host_facts.ansible_facts.ansible_cmdline.BOOT_IMAGE is match("rescue") or (hetzner_server_force_provisioning is defined and hetzner_server_force_provisioning )
 #  delegate_to: localhost
 
-- name: "Setup | Check rescue mode"
-  ansible.builtin.uri:
-    url: "{{ hetzner_server_api_url }}/boot/{{ hetzner_server_number }}/rescue"
-    method: GET
-    user: "{{ hetzner_server_api_username }}"
-    password: "{{ hetzner_server_api_password }}"
-    force_basic_auth: yes
-    status_code: 200
-  register: _hetzner_server_rescue
-  delegate_to: localhost
+#- name: "Setup | Check rescue mode"
+#  ansible.builtin.uri:
+#    url: "{{ hetzner_server_api_url }}/boot/{{ hetzner_server_number }}/rescue"
+#    method: GET
+#    user: "{{ hetzner_server_api_username }}"
+#    password: "{{ hetzner_server_api_password }}"
+#    force_basic_auth: yes
+#    status_code: 200
+#  register: _hetzner_server_rescue
+#  delegate_to: localhost
 
-- name: "Setup | Display rescue mode"
-  ansible.builtin.debug:
-    msg: "Rescue mode is {{ _hetzner_server_rescue.json.rescue.active }}"
-  delegate_to: localhost
+#- name: "Setup | Display rescue mode"
+#  ansible.builtin.debug:
+#    msg: "Rescue mode is {{ _hetzner_server_rescue.json.rescue.active }}"
+#  delegate_to: localhost
 
 
 
