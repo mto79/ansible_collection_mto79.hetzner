@@ -42,7 +42,8 @@
     msg: "Executing action: {{ __role_action }} in role: {{ __role_name }}"
 
 - name: "Main | platform/version specific playbooks"
-  ansible.builtin.include_tasks: "{{ lookup('ansible.builtin.first_found', find_playbooks) }}"
+  ansible.builtin.debug: 
+    msg: "{{ lookup('ansible.builtin.first_found', find_playbooks) }}"
   vars:
     find_playbooks:
       files:
