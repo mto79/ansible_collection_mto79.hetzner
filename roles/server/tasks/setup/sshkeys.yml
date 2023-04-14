@@ -57,9 +57,9 @@
           - _hetzner_server_key_selection is defined
           - _hetzner_server_key_selection.user_input | int >= 0
           - _hetzner_server_Key_selection.user_input | int < _hetzner_server_ssh_keys.ssh_keys | count
-      fail_msg: "Please select an Hetzner SSH Key"
-      success_msg: "Hetzner SSH Key selected"
-      quiet: false
+        fail_msg: "Please select an Hetzner SSH Key"
+        success_msg: "Hetzner SSH Key selected"
+        quiet: false
       delegate_to: localhost
 
     - name: "Setup | Set authorized_key fact"
