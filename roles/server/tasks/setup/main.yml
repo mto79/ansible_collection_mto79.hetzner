@@ -55,11 +55,15 @@
     status_code: 200
   register: _hetzner_servers_keys
   delegate_to: localhost
-  
-- name: "Setup | Debug _hetzner_servers_keys"
-  ansible.builtin.debug:
-    msg: "{{ _hetzner_servers_keys.json }}"
-  delegate_to: localhost
+  ignore_errors: true 
+
+- name: "Setup | Test if ssh keys are available"
+  ansible.builtin.assert:
+    that:
+      - _hetzner_servers_keys is defined
+      - _hetzner_servers_keys.json | count > 0
+    fail_msg: "No ssh keys available"
+    success_msg: "ssh keys available"
 
 - name: "Setup | Select ssh key"
   ansible.builtin.pause:
