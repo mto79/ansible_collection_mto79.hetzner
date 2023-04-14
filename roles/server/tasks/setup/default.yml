@@ -8,6 +8,8 @@
     public_key: "{{ item.public_key }}"
   loop: "{{ hetzner_server_sshkeys }}"
   when:
+    - item.state is defined
+    - item.state == "present"
     - hetzner_server_sshkeys is defined
     - hetzner_server_sshkeys | count > 0
 
