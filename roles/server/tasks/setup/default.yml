@@ -7,8 +7,8 @@
     hetzner_server_api_method: "POST"
     hetzner_server_api_body_format: "form-urlencoded"
     hetzner_server_api_body: |
-      "name={{ item.name }}"
-      "data={{ item.public_key }}"     
+      name={{ item.name }}
+      data={{ item.public_key }}
   loop: "{{ hetzner_server_sshkeys }}"
   when:
     - hetzner_server_sshkeys is defined
