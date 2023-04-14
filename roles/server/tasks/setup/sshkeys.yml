@@ -27,4 +27,40 @@
     - hetzner_server_sshkeys is defined
     - hetzner_server_sshkeys | count > 0
 
+- name: "Setup | List all SSH keys"
+  community.hrobot.ssh_key_info:
+    hetzner_user: "{{ hetzner_server_api_username }}"
+    hetzner_password: "{{ hetzner_server_api_password }}"
+  register: _hetzner_server_ssh_keys
+
+- name: Show how many keys were found
+  ansible.builtin.debug:
+    msg: "Found {{ _hetzner_server_ssh_keys.ssh_keys | count }} ssh keys"
+
+- name: "Setup | Select ssh key"
+  ansible.builtin.pause:
+    prompt: |
+      {% for _hetzner_server_key in _hetzner_server_ssh_keys.ssh_keys %}
+      {{ loop.index0 }} => {{ _hetzner_server_key.name }}
+      {% endfor %}
+      Select your ssh key, by entering the number
+  register: _hetzner_server_key_selection
+  delegate_to: localhost
+
+- name: "Setup | Test if selection is correct"
+  ansible.builtin.assert:
+    that:
+      - _hetzner_server_key_selection is defined
+      - _hetzner_server_key_selection.user_input | int >= 0
+      - _hetzner_server_Key_selection.user_input | int < _hetzner_server_ssh_keys.ssh_keys | count
+    fail_msg: "Please select an Hetzner SSH Key"
+    success_msg: "Hetzner SSH Key selected"
+    quiet: false
+  delegate_to: localhost
+
+- name: "Setup | Set authorized_key fact"
+  ansible.builtin.set_fact:
+    hetzner_server_authorized_key: "{{_hetzner_server_ssh_keys.ssh_keys[_hetzner_server_key_selection.user_input | int].key.fingerprint }}"
+  delegate_to: localhost
+
 ...
