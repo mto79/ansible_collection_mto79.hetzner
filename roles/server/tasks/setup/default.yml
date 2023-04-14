@@ -1,5 +1,5 @@
 ---
-- name: "Setup | Add an SSH key"
+- name: "Setup | Add a SSH key"
   community.hrobot.ssh_key:
     hetzner_user: "{{ hetzner_server_api_username }}"
     hetzner_password: "{{ hetzner_server_api_password }}"
@@ -10,6 +10,20 @@
   when:
     - item.state is defined
     - item.state == "present"
+    - hetzner_server_sshkeys is defined
+    - hetzner_server_sshkeys | count > 0
+
+- name: "Setup | Remove a SSH Key"
+  community.hrobot.ssh_key:
+    hetzner_user: "{{ hetzner_server_api_username }}"
+    hetzner_password: "{{ hetzner_server_api_password }}"
+    state: "{{ item.state | default('absent') }}"
+    name: "{{ item.name }}"
+    fingerprint: "{{ item.fingerprint }}"
+  loop: "{{ hetzner_server_sshkeys }}"
+  when:
+    - item.state is defined
+    - item.state == "absent"
     - hetzner_server_sshkeys is defined
     - hetzner_server_sshkeys | count > 0
 
