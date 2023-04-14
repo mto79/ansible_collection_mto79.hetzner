@@ -30,6 +30,10 @@
     # Handle exceptions and errors
     - ansible.builtin.fail:
         msg: "HTTP request failed: {{ _hetzner_servers_api_result.msg }}"
-  ignore_errors: true 
+
+#- name: "Api | Set result"
+#  ansible.builtin.set_fact:
+#    _hetzner_server_api_result: "{{ _hetzner_servers_api_result }}"
+#  when: "_hetzner_servers_api_result.status == 200"
 
 ...
