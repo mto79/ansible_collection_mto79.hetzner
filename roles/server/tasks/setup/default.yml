@@ -15,33 +15,21 @@
       hetzner_server_authorized_key is not defined or hetzner_server_authorized_key == ""
   delegate_to: localhost
 
-#- name: "Setup | Retrieve current setup of {{ hetzner_server_ip }}"
-#  ansible.builtin.gather_facts:
-#  register: _hetzner_server_host_facts
-#  delegate_to: "{{ hetzner_server_ip }}"
+- name: "Setup | Rescue Server"
+  ansible.builtin.include_tasks: 
+    file: "rescue.yml"
 
-#- name: "Setup | Check Boot image and hetzner_force_provisioning"
-#  ansible.builtin.set_fact:
-#    _hetzner_server_needs_reprovision: true
-#  when:
-#    - _hetzner_server_host_facts.ansible_facts.ansible_cmdline.BOOT_IMAGE is match("rescue") or (hetzner_server_force_provisioning is defined and hetzner_server_force_provisioning )
-#  delegate_to: localhost
+- name: "Setup | Wait 600 seconds for port 22 to become open"
+  ansible.builtin.wait_for:
+    port: 22
+    host: '{{ hetzner_server_ip }}'
+    delay: 10
+    timeout: 600
+  connection: local
 
-#- name: "Setup | Check rescue mode"
-#  ansible.builtin.uri:
-#    url: "{{ hetzner_server_api_url }}/boot/{{ hetzner_server_number }}/rescue"
-#    method: GET
-#    user: "{{ hetzner_server_api_username }}"
-#    password: "{{ hetzner_server_api_password }}"
-#    force_basic_auth: yes
-#    status_code: 200
-#  register: _hetzner_server_rescue
-#  delegate_to: localhost
-
-#- name: "Setup | Display rescue mode"
-#  ansible.builtin.debug:
-#    msg: "Rescue mode is {{ _hetzner_server_rescue.json.rescue.active }}"
-#  delegate_to: localhost
-
+- name: "Setup | Refresh information after re-install of {{ hetzner_ip }}"
+  ansible.builtin.gather_facts:
+  register: _hetzner_server_host_facts
+  delegate_to: "{{ hetzner_server_ip }}"
 
 ...

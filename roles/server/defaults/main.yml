@@ -1,12 +1,11 @@
 ---
 hetzner_server_api_url: "https://robot-ws.your-server.de"
-hetzner_server_force_provisioning: false
+hetzner_server_disk1: "sda"
+hetzner_server_disk2: "sdb"
+hetzner_server_image: "/root/CentOS-91-el-x86_64-minimal.tar.xz"
+hetzner_server_image_ignore_errors: false
+hetzner_server_size_of_libvirt_images: "all" 
 
-#hetzner_server_hostname:               # needed for Hetzner server computer name
-hetzner_server_disk1: sda
-hetzner_server_disk2: sdb
-hetzner_server_image: "/root/.oldroot/nfs/install/../images/CentOS-80-stream-amd64-base.tar.gz"
-#hetzner_server_image_ignore_errors: false
 #ansible_python_interpreter: /usr/bin/python3  # target host python interpreter
 
 
