@@ -1,7 +1,7 @@
 ---
 - name: "Rescue | Enable a rescue system (64bit Linux) for the next boot" 
   community.hrobot.boot:
-    hetzner_user: "{{ hetzner_server_api_user }}"
+    hetzner_user: "{{ hetzner_server_api_username }}"
     hetzner_password: "{{ hetzner_server_api_password }}"
     server_number: "{{ hetzner_server_number | int }}"
     rescue:
@@ -15,7 +15,7 @@
 
 - name: "Rescue | Make sure that the server supports manual reset"
   community.hrobot.reset:
-    hetzner_user: "{{ hetzner_server_api_user }}"
+    hetzner_user: "{{ hetzner_server_api_username }}"
     hetzner_password: "{{ hetzner_server_api_password }}"
     server_number: "{{ hetzner_server_number | int }}"
     reset_type: "hardware"
