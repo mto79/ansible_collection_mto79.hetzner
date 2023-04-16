@@ -40,23 +40,23 @@
     timeout: 600
   connection: local
 
-#- name: Copy file with owner and permissions
-#  ansible.builtin.copy:
-#    src: "{{ hetzner_server_image_source }}"
-#    dest: "{{ hetzner_server_image }}"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  delegate_to: "{{ hetzner_server_ip }}"
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: "{{ hetzner_server_image_source }}"
+    dest: "{{ hetzner_server_image }}"
+    owner: root
+    group: root
+    mode: 0644
+  delegate_to: "{{ hetzner_server_ip }}"
 
-#- name: "Rescue | Copy autosetup configuration file"
-#  ansible.builtin.template:
-#    src: "templates/hetzner_rescue_autosetup.j2"
-#    dest: /root/hetzner_rescue_autosetup.ansible
-#    owner: root
-#    group: root
-#    mode: 0644
-#  delegate_to: "{{ hetzner_server_ip }}"
+- name: "Rescue | Copy autosetup configuration file"
+  ansible.builtin.template:
+    src: "templates/hetzner_rescue_autosetup.j2"
+    dest: /root/hetzner_rescue_autosetup.ansible
+    owner: root
+    group: root
+    mode: 0644
+  delegate_to: "{{ hetzner_server_ip }}"
 
 #- name: "Rescue | Run installimage"
 #  ansible.builtin.command: "/root/.oldroot/nfs/install/installimage -a -c /root/hetzner_rescue_autosetup.ansible"
