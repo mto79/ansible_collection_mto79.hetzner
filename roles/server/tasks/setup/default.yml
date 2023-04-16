@@ -27,7 +27,7 @@
     timeout: 600
   connection: local
 
-- name: "Setup | Refresh information after re-install of {{ hetzner_ip }}"
+- name: "Setup | Refresh information after re-install of {{ hetzner_server_ip }}"
   ansible.builtin.gather_facts:
   register: _hetzner_server_host_facts
   delegate_to: "{{ hetzner_server_ip }}"
