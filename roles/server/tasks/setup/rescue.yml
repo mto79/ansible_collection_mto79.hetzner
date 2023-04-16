@@ -7,7 +7,7 @@
     rescue:
       arch: 64
       os: linux
-      authorized_keys: "{{ hetzner_server_rescue_authorized_key }}"     
+      authorized_keys: "{{ hetzner_server_authorized_key }}"     
       
 - name:  "Rescue | Pause a bit to allow rescue mode to settle"
   ansible.builtin.pause: 
