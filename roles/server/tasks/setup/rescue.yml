@@ -25,6 +25,7 @@
   register: _hetzner_server_cmd_output
   failed_when: _hetzner_server_cmd_output.rc != 0
   changed_when: '"updated" in _hetzner_server_cmd_output.stdout'
+  ignore_errors: true
   delegate_to: localhost
 
 - name:  "Rescue | Pause a bit for the hardware reset to kick in"
@@ -103,6 +104,7 @@
 #  register: _hetzner_server_cmd_output
 #  failed_when: _hetzner_server_cmd_output.rc != 0
 #  changed_when: '"updated" in _hetzner_server_cmd_output.stdout'
+#  ignore_errors: true
 #  delegate_to: localhost
 
 ...
