@@ -21,7 +21,7 @@
     reset_type: "hardware"
 
 - name: "Rescue | Remove server from local known_hosts file"
-  ansible.bultin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_ip }}"
+  ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_ip }}"
   register: _hetzner_server_cmd_output
   failed_when: _hetzner_server_cmd_output.rc != 0
   changed_when: '"updated" in _hetzner_server_cmd_output.stdout'
@@ -39,70 +39,70 @@
     timeout: 600
   connection: local
 
-- name: Copy file with owner and permissions
-  ansible.builtin.copy:
-    src: "{{ hetzner_server_image_source }}"
-    dest: "{{ hetzner_server_image }}"
-    owner: root
-    group: root
-    mode: 0644
-  delegate_to: "{{ hetzner_server_ip }}"
+#- name: Copy file with owner and permissions
+#  ansible.builtin.copy:
+#    src: "{{ hetzner_server_image_source }}"
+#    dest: "{{ hetzner_server_image }}"
+#    owner: root
+#    group: root
+#    mode: 0644
+#  delegate_to: "{{ hetzner_server_ip }}"
 
-- name: "Rescue | Copy autosetup configuration file"
-  ansible.builtin.template:
-    src: "templates/hetzner_rescue_autosetup.j2"
-    dest: /root/hetzner_rescue_autosetup.ansible
-    owner: root
-    group: root
-    mode: 0644
-  delegate_to: "{{ hetzner_server_ip }}"
+#- name: "Rescue | Copy autosetup configuration file"
+#  ansible.builtin.template:
+#    src: "templates/hetzner_rescue_autosetup.j2"
+#    dest: /root/hetzner_rescue_autosetup.ansible
+#    owner: root
+#    group: root
+#    mode: 0644
+#  delegate_to: "{{ hetzner_server_ip }}"
 
-- name: "Rescue | Run installimage"
-  ansible.builtin.command: "/root/.oldroot/nfs/install/installimage -a -c /root/hetzner_rescue_autosetup.ansible"
-  environment:
-    TERM: "vt100"
-  register: _hetzner_server_installimage_result
-  changed_when: true
-  failed_when: false
-  delegate_to: "{{ hetzner_server_ip }}"
+#- name: "Rescue | Run installimage"
+#  ansible.builtin.command: "/root/.oldroot/nfs/install/installimage -a -c /root/hetzner_rescue_autosetup.ansible"
+#  environment:
+#    TERM: "vt100"
+#  register: _hetzner_server_installimage_result
+#  changed_when: true
+#  failed_when: false
+#  delegate_to: "{{ hetzner_server_ip }}"
 
-- name: "Rescue | Print installimage output with -v"
-  ansible.builtin.debug:
-    var: _hetzner_server_installimage_result.stdout_lines
-    verbosity: 1
-  delegate_to: localhost
+#- name: "Rescue | Print installimage output with -v"
+#  ansible.builtin.debug:
+#    var: _hetzner_server_installimage_result.stdout_lines
+#    verbosity: 1
+#  delegate_to: localhost
 
-- name: "Rescue | Check stderr from installimage"
-  ansible.builtin.debug:
-    msg: "Something want wrong at installimage: {{ _hetzner_server_installimage_result.stderr_lines | join('\n') }}"
-  when:
-    - _hetzner_server_installimage_result.stderr_lines | length > 0
-    - not hetzner_server_image_ignore_errors
-  delegate_to: localhost
+#- name: "Rescue | Check stderr from installimage"
+#  ansible.builtin.debug:
+#    msg: "Something want wrong at installimage: {{ _hetzner_server_installimage_result.stderr_lines | join('\n') }}"
+#  when:
+#    - _hetzner_server_installimage_result.stderr_lines | length > 0
+#    - not hetzner_server_image_ignore_errors
+#  delegate_to: localhost
 
-- name: "Rescue | Check stdout from installimage"
-  ansible.builtin.fail:
-    msg: "Installation failed, check log: {{ result.stdout_lines | join('\n') }}"
-  when:
-    - >
-      _hetzner_server_installimage_result.stdout is search('An error occured while installing the new system') or
-      _hetzner_server_installimage_result.stdout is search('Cancelled')
-    - not hetzner_server_image_ignore_errors
-  delegate_to: localhost
+#- name: "Rescue | Check stdout from installimage"
+#  ansible.builtin.fail:
+#    msg: "Installation failed, check log: {{ result.stdout_lines | join('\n') }}"
+#  when:
+#    - >
+#      _hetzner_server_installimage_result.stdout is search('An error occured while installing the new system') or
+#      _hetzner_server_installimage_result.stdout is search('Cancelled')
+#    - not hetzner_server_image_ignore_errors
+#  delegate_to: localhost
 
-- name: "Rescue | Reboot server"
-  ansible.builtin.shell: sync && sleep 2 && shutdown -r now
-  async: 1
-  poll: 0
-  changed_when: true
-  failed_when: false
-  delegate_to: "{{ hetzner_ip }}"
+#- name: "Rescue | Reboot server"
+#  ansible.builtin.shell: sync && sleep 2 && shutdown -r now
+#  async: 1
+#  poll: 0
+#  changed_when: true
+#  failed_when: false
+#  delegate_to: "{{ hetzner_ip }}"
 
-- name: "Rescue | Remove server from local known_hosts file"
-  ansible.bultin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_ip }}"
-  register: _hetzner_server_cmd_output
-  failed_when: _hetzner_server_cmd_output.rc != 0
-  changed_when: '"updated" in _hetzner_server_cmd_output.stdout'
-  delegate_to: localhost
+#- name: "Rescue | Remove server from local known_hosts file"
+#  ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_ip }}"
+#  register: _hetzner_server_cmd_output
+#  failed_when: _hetzner_server_cmd_output.rc != 0
+#  changed_when: '"updated" in _hetzner_server_cmd_output.stdout'
+#  delegate_to: localhost
 
 ...
