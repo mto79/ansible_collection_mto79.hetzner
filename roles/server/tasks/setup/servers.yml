@@ -36,7 +36,7 @@
 
     - name: "Setup | Set hetzner_server_ip"
       ansible.builtin.set_fact:
-        hetzner_server_ip: "{{_hetzner_server_servers_result.servers[_hetzner_server_selection.user_input | int].server_ip }}"
+        hetzner_server_ip: "{{ _hetzner_server_servers_result.servers[_hetzner_server_selection.user_input | int].server_ip }}"
         hetzner_server_number: "{{ _hetzner_server_servers_result.servers[_hetzner_server_selection.user_input | int].server_number }}"
       delegate_to: localhost
 

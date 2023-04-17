@@ -1,5 +1,5 @@
 ---
-- name: "Rescue | Enable a rescue system (64bit Linux) for the next boot" 
+- name: "Rescue | Enable a rescue system (64bit Linux) for the next boot"
   community.hrobot.boot:
     hetzner_user: "{{ hetzner_server_api_username }}"
     hetzner_password: "{{ hetzner_server_api_password }}"
@@ -7,10 +7,10 @@
     rescue:
       arch: 64
       os: linux
-      authorized_keys: "{{ hetzner_server_authorized_key }}"     
-      
-- name:  "Rescue | Pause a bit to allow rescue mode to settle"
-  ansible.builtin.pause: 
+      authorized_keys: "{{ hetzner_server_authorized_key }}"
+
+- name: "Rescue | Pause a bit to allow rescue mode to settle"
+  ansible.builtin.pause:
     seconds: 5
 
 - name: "Rescue | Make sure that the server supports manual reset"
@@ -28,8 +28,8 @@
   ignore_errors: true
   delegate_to: localhost
 
-- name:  "Rescue | Pause a bit for the hardware reset to kick in"
-  ansible.builtin.pause: 
+- name: "Rescue | Pause a bit for the hardware reset to kick in"
+  ansible.builtin.pause:
     seconds: 5
 
 - name: "Rescue | wait 600 seconds for port 22 to become open"
@@ -46,7 +46,7 @@
     dest: "{{ hetzner_server_image }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   delegate_to: "{{ hetzner_server_ip }}"
 
 - name: "Rescue | Copy autosetup configuration file"
@@ -55,7 +55,7 @@
     dest: /root/hetzner_rescue_autosetup.ansible
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   delegate_to: "{{ hetzner_server_ip }}"
 
 - name: "Rescue | Run installimage"

@@ -34,7 +34,7 @@
       - hetzner_server_disk1 is defined
       - hetzner_server_disk1 is string
     quiet: true
-    
+
 - name: "Assert | Test if hetzner_server_disk2 is set correctly"
   ansible.builtin.assert:
     that:

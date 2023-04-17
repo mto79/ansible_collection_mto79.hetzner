@@ -50,10 +50,10 @@
         - "{{ ansible_facts['os_family'] | lower }}.yml"
         - "default.yml"
       skip: true
-      paths: 
+      paths:
         - "tasks/{{ __role_action_task }}"
   loop: "{{ [__role_action | default('setup')] | flatten }}"
   loop_control:
-    loop_var: __role_action_task 
+    loop_var: __role_action_task
 
 ...

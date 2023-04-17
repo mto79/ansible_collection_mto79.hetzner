@@ -4,11 +4,6 @@ hetzner_server_disk1: "sda"
 hetzner_server_disk2: "sdb"
 hetzner_server_image: "/root/CentOS-91-el-x86_64-minimal.tar.xz"
 hetzner_server_image_ignore_errors: false
-hetzner_server_size_of_libvirt_images: "all" 
-
-#ansible_python_interpreter: /usr/bin/python3  # target host python interpreter
-
-
-
+hetzner_server_size_of_libvirt_images: "all"
 
 ...
