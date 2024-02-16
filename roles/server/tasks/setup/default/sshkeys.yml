@@ -33,7 +33,7 @@
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
   register: "_hetzner_server_setup_ssh_keys"
 
-- name: Show how many keys were found
+- name: "Setup | Show how many keys were found"
   ansible.builtin.debug:
     msg: "Found {{ _hetzner_server_setup_ssh_keys.ssh_keys | count }} ssh keys"
   failed_when: (_hetzner_server_setup_ssh_keys.ssh_keys | count) | int == 0
