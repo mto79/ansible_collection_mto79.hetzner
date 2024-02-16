@@ -7,75 +7,79 @@
       - __role_name in ["hetzner.server"]
     quiet: true
 
-- name: "Assert | Test if hetzner_server_api_url is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_api_url is defined
-      - hetzner_server_api_url is string
-    quiet: true
+- name: "Assert | Definitions for Setup"
+  when: __role_name == "setup"
+  block:
 
-- name: "Assert | Test if hetzner_server_api_username is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_api_username is defined
-      - hetzner_server_api_username is vault_encrypted
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_api_url is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_api_url is defined
+          - hetzner_server_setup_api_url is string
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_api_password is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_api_password is defined
-      - hetzner_server_api_password is vault_encrypted
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_api_username is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_api_username is defined
+          - hetzner_server_setup_api_username is vault_encrypted
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_disk1 is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_disk1 is defined
-      - hetzner_server_disk1 is string
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_api_password is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_api_password is defined
+          - hetzner_server_setup_api_password is vault_encrypted
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_disk2 is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_disk2 is defined
-      - hetzner_server_disk2 is string
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_disk1 is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_disk1 is defined
+          - hetzner_server_setup_disk1 is string
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_hostname is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_hostname is defined
-      - hetzner_server_hostname is string
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_disk2 is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_disk2 is defined
+          - hetzner_server_setup_disk2 is string
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_image is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_image is defined
-      - hetzner_server_image is string
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_hostname is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_hostname is defined
+          - hetzner_server_setup_hostname is string
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_image_source is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_image_source is defined
-      - hetzner_server_image_source is string
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_image is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_image is defined
+          - hetzner_server_setup_image is string
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_image_ignore_errors is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_image_ignore_errors is defined
-      - hetzner_server_image_ignore_errors is boolean
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_image_source is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_image_source is defined
+          - hetzner_server_setup_image_source is string
+        quiet: true
 
-- name: "Assert | Test if hetzner_server_size_of_libvirt_images is set correctly"
-  ansible.builtin.assert:
-    that:
-      - hetzner_server_size_of_libvirt_images is defined
-      - hetzner_server_size_of_libvirt_images is string
-      - hetzner_server_size_of_libvirt_images in ["all", "small", "medium", "large"]
-    quiet: true
+    - name: "Assert | Test if hetzner_server_setup_image_ignore_errors is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_image_ignore_errors is defined
+          - hetzner_server_setup_image_ignore_errors is boolean
+        quiet: true
+
+    - name: "Assert | Test if hetzner_server_setup_size_of_libvirt_images is set correctly"
+      ansible.builtin.assert:
+        that:
+          - hetzner_server_setup_size_of_libvirt_images is defined
+          - hetzner_server_setup_size_of_libvirt_images is string
+          - hetzner_server_setup_size_of_libvirt_images in ["all", "small", "medium", "large"]
+        quiet: true
 
 ...

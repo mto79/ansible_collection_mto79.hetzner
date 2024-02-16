@@ -1,12 +1,12 @@
-DRIVE1 /dev/{{ hetzner_server_disk1 }}
-DRIVE2 /dev/{{ hetzner_server_disk2 }}
+DRIVE1 /dev/{{ hetzner_server_setup_disk1 }}
+DRIVE2 /dev/{{ hetzner_server_setup_disk2 }}
 
 SWRAID 1
 SWRAIDLEVEL 0
 
 BOOTLOADER grub
 
-HOSTNAME {{ hetzner_server_hostname }}
+HOSTNAME {{ hetzner_server_setup_hostname }}
 
 PART /boot ext4 1024M
 PART lvm vg0 all
@@ -18,4 +18,4 @@ LV vg0 tmp             /tmp            xfs  5G
 LV vg0 var             /var            xfs  50G
 LV vg0 libvirt /var/lib/libvirt/images xfs  {{ hetzner_server_size_of_libvirt_images}}
 
-IMAGE {{ hetzner_server_image }}
+IMAGE {{ hetzner_server_setup_image }}

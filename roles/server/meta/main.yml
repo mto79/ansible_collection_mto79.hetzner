@@ -1,10 +1,10 @@
 ---
 galaxy_info:
-  author: Marc Ouwerkerk.
-  role_name: hetzner_server
-  description: Provision Hetzner Dedicated server with rescue
-  license: Apache-2.0
-  min_ansible_version: "2.10"
+  author: "MTO79"
+  role_name: "hetzner_server"
+  description: "Provision Hetzner Dedicated server with rescue"
+  license: "MIT"
+  min_ansible_version: "2.13"
   standalone: true
 
   platforms: []
