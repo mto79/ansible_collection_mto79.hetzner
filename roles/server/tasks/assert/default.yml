@@ -7,12 +7,6 @@
       - __role_name in ["hetzner_server"]
     quiet: true
 
-
-- name: "Display __role_action"
-  ansible.builtin.debug:
-    msg: "Role action is {{ __role_action }}"
-
-
 - name: "Assert | Definitions for Setup"
   when: "'setup' in __role_action"
   block:
@@ -20,22 +14,24 @@
     - name: "Assert | Test if hetzner_server_setup_api_url is set correctly"
       ansible.builtin.assert:
         that:
-          - hetzner_server_setup_api_url is defined
-          - hetzner_server_setup_api_url is string
+          - "hetzner_server_setup_api_url is defined"
+          - "hetzner_server_setup_api_url is string"
         quiet: true
 
     - name: "Assert | Test if hetzner_server_setup_api_username is set correctly"
       ansible.builtin.assert:
         that:
-          - hetzner_server_setup_api_username is defined
-          - hetzner_server_setup_api_username is vault_encrypted
+          - "hetzner_server_setup_api_username is defined"
+          - "hetzner_server_setup_api_username is string"
+          - "hetzner_server_setup_api_username | length > 0"
         quiet: true
 
     - name: "Assert | Test if hetzner_server_setup_api_password is set correctly"
       ansible.builtin.assert:
         that:
           - hetzner_server_setup_api_password is defined
-          - hetzner_server_setup_api_password is vault_encrypted
+          - hetzner_server_setup_api_password is string
+          - hetzner_server_setup_api_password | length > 0
         quiet: true
 
     - name: "Assert | Test if hetzner_server_setup_disk1 is set correctly"
