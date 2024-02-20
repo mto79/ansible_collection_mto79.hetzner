@@ -4,7 +4,7 @@
     that:
       - __role_name is defined
       - __role_name is string
-      - __role_name in ["hetzner.server"]
+      - __role_name in ["hetzner_server"]
     quiet: true
 
 - name: "Assert | Definitions for Setup"
