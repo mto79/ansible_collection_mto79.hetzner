@@ -7,7 +7,7 @@
   ansible.builtin.include_tasks:
     file: "default/servers.yml"
 
-- name: "Setup | Display infor selected server"
+- name: "Setup | Display information selected server"
   ansible.builtin.debug:
     msg: "Selected server {{ hetzner_server_setup_number }} with IP {{ hetzner_server_setup_ip }} and authorized_key {{ hetzner_server_setup_authorized_key }}"
   failed_when: hetzner_server_setup_number is not defined or hetzner_server_setup_number == "" or

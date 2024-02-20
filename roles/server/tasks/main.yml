@@ -55,7 +55,7 @@
   when: __role_found_tasks | length > 0  # Check if any tasks were found
 
 # Run tasks in parallel with all hosts
-- name: "Main | tasks that always run"
+- name: "Main | Tasks that always run"
   ansible.builtin.include_tasks: "{{ __role_found_tasks }}"
   vars:
     __role_find_tasks:

@@ -1,5 +1,5 @@
 ---
-__role_name: "hetzner.server"
+__role_name: "hetzner_server"
 __role_file_search_order:
   - "{{ (ansible_facts['distribution'] | lower) | replace(' ', '_') }}_\
     {{ ansible_facts['distribution_release'] | lower | replace(' ', '_') }}_\

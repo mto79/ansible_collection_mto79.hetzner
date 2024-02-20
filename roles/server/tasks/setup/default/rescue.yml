@@ -40,7 +40,7 @@
     timeout: 600
   connection: "local"
 
-- name: Copy file with owner and permissions
+- name: "Rescue | Copy file with owner and permissions"
   ansible.builtin.copy:
     src: "{{ hetzner_server_setup_image_source }}"
     dest: "{{ hetzner_server_setup_image }}"
@@ -62,7 +62,7 @@
   ansible.builtin.command: "/root/.oldroot/nfs/install/installimage -a -c /root/hetzner_rescue_autosetup.ansible"
   environment:
     TERM: "vt100"
-  register: _hetzner_server_setup_installimage_result
+  register: "_hetzner_server_setup_installimage_result"
   changed_when: true
   failed_when: false
   delegate_to: "{{ hetzner_server_setup_ip }}"
