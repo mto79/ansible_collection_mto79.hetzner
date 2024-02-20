@@ -8,7 +8,7 @@
     quiet: true
 
 - name: "Assert | Definitions for Setup"
-  when: __role_name == "setup"
+  when: __role_action == "setup"
   block:
 
     - name: "Assert | Test if hetzner_server_setup_api_url is set correctly"
