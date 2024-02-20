@@ -7,6 +7,12 @@
       - __role_name in ["hetzner_server"]
     quiet: true
 
+
+- name: "Display __role_action"
+  ansible.builtin.debug:
+    msg: "Role action is {{ __role_action }}"
+
+
 - name: "Assert | Definitions for Setup"
   when: __role_action == "setup"
   block:
