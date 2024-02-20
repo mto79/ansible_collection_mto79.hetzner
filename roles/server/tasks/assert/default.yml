@@ -14,7 +14,7 @@
 
 
 - name: "Assert | Definitions for Setup"
-  when: __role_action == "setup"
+  when: "'setup' in __role_action"
   block:
 
     - name: "Assert | Test if hetzner_server_setup_api_url is set correctly"
