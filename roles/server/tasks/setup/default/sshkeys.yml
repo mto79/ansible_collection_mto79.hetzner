@@ -1,5 +1,5 @@
 ---
-- name: "Setup | Add a SSH key"
+- name: "Setup | Sshkeys | Add a SSH key"
   community.hrobot.ssh_key:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
@@ -13,7 +13,7 @@
     - hetzner_server_setup_sshkeys is defined
     - hetzner_server_setup_sshkeys | count > 0
 
-- name: "Setup | Remove a SSH Key"
+- name: "Setup | Sshkeys | Remove a SSH Key"
   community.hrobot.ssh_key:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
@@ -27,42 +27,43 @@
     - hetzner_server_setup_sshkeys is defined
     - hetzner_server_setup_sshkeys | count > 0
 
-- name: "Setup | List all SSH keys"
+- name: "Setup | Sshkeys | List all SSH keys"
   community.hrobot.ssh_key_info:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
   register: "_hetzner_server_setup_ssh_keys"
 
-- name: "Setup | Show how many keys were found"
+- name: "Setup | Sshkeys | Show how many keys were found"
   ansible.builtin.debug:
     msg: "Found {{ _hetzner_server_setup_ssh_keys.ssh_keys | count }} ssh keys"
   failed_when: (_hetzner_server_setup_ssh_keys.ssh_keys | count) | int == 0
 
-- name: "Setup | Select ssh key"
+- name: "Setup | Sshkeys | Select ssh key"
   when: _hetzner_server_setup_ssh_keys.ssh_keys | count > 0
   block:
-    - name: "Setup | Select ssh key"
+
+    - name: "Setup | Sshkeys | Select ssh key"
       ansible.builtin.pause:
         prompt: |
           {% for _hetzner_server_setup_key in _hetzner_server_setup_ssh_keys.ssh_keys %}
           {{ loop.index0 }} => {{ _hetzner_server_setup_key.name }} - {{ _hetzner_server_setup_key.data }}
           {% endfor %}
           Select your ssh key, by entering the number
-      register: _hetzner_server_setup_key_selection
-      delegate_to: localhost
+      register: "_hetzner_server_setup_key_selection"
+      delegate_to: "localhost"
 
-    - name: "Setup | Test if selection is correct"
+    - name: "Setup | Sshkeys | Test if selection is correct"
       ansible.builtin.assert:
         that:
-          - _hetzner_server_setup_key_selection is defined
-          - _hetzner_server_setup_key_selection.user_input | int >= 0
-          - _hetzner_server_setup_key_selection.user_input | int < _hetzner_server_setup_ssh_keys.ssh_keys | count
+          - "_hetzner_server_setup_key_selection is defined"
+          - "_hetzner_server_setup_key_selection.user_input | int >= 0"
+          - "_hetzner_server_setup_key_selection.user_input | int < _hetzner_server_setup_ssh_keys.ssh_keys | count"
         fail_msg: "Please select an Hetzner SSH Key"
         success_msg: "Hetzner SSH Key selected"
         quiet: false
       delegate_to: "localhost"
 
-    - name: "Setup | Set authorized_key fact"
+    - name: "Setup | Sshkeys | Set authorized_key fact"
       ansible.builtin.set_fact:
         hetzner_server_setup_authorized_key: "{{ _hetzner_server_setup_ssh_keys.ssh_keys[_hetzner_server_setup_key_selection.user_input | int].fingerprint }}"
       delegate_to: "localhost"

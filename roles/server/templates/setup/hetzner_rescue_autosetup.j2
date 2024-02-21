@@ -1,12 +1,22 @@
+{% if hetzner_server_setup_disk1 is defined %}
 DRIVE1 /dev/{{ hetzner_server_setup_disk1 }}
+{% endif %}
+{% if hetzner_server_setup_disk2 is defined %}
 DRIVE2 /dev/{{ hetzner_server_setup_disk2 }}
+{% endif %}
 
-SWRAID 1
-SWRAIDLEVEL 0
+{% if hetzner_server_setup_swraid is defined %}
+SWRAID {{ hetzner_server_setup_swraid }}
+{% if hetzner_server_setup_swraidlevel is defined %}
+SWRAIDLEVEL {{ hetzner_server_setup_swraidlevel }}
+{% endif %}
+{% endif %}
 
 BOOTLOADER grub
 
+{% if hetzner_server_setup_hostname is defined %}
 HOSTNAME {{ hetzner_server_setup_hostname }}
+{% endif %}
 
 PART /boot ext4 1024M
 PART lvm vg0 all
@@ -16,6 +26,6 @@ LV vg0 swap            swap            swap 8G
 LV vg0 home            /home           xfs  30G
 LV vg0 tmp             /tmp            xfs  5G
 LV vg0 var             /var            xfs  50G
-LV vg0 libvirt /var/lib/libvirt/images xfs  {{ hetzner_server_size_of_libvirt_images}}
+LV vg0 libvirt /var/lib/libvirt/images xfs  {{ hetzner_server_setup_size_of_libvirt_images | d('all') }}
 
-IMAGE {{ hetzner_server_setup_image }}
+IMAGE {{ hetzner_server_setup_image | d('/root/images/CentOS-90-stream-amd64-base.tar.gz') }}

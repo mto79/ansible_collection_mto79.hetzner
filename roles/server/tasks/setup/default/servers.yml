@@ -3,7 +3,7 @@
   community.hrobot.server_info:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
-  register: _hetzner_server_setup_servers_result
+  register: "_hetzner_server_setup_servers_result"
 
 - name: Show how many Hetzner servers were found
   ansible.builtin.debug:

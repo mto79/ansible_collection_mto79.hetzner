@@ -1,5 +1,5 @@
 ---
-- name: "Rescue | Enable a rescue system (64bit Linux) for the next boot"
+- name: "Setup | Rescue | Enable a rescue system (64bit Linux) for the next boot"
   community.hrobot.boot:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
@@ -9,18 +9,18 @@
       os: "linux"
       authorized_keys: "{{ hetzner_server_setup_authorized_key }}"
 
-- name: "Rescue | Pause a bit to allow rescue mode to settle"
+- name: "Setup | Rescue | Pause a bit to allow rescue mode to settle"
   ansible.builtin.pause:
     seconds: 5
 
-- name: "Rescue | Make sure that the server supports manual reset"
+- name: "Setup | Rescue | Make sure that the server supports manual reset"
   community.hrobot.reset:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
     server_number: "{{ hetzner_server_setup_number | int }}"
     reset_type: "hardware"
 
-- name: "Rescue | Remove server from local known_hosts file"
+- name: "Setup | Rescue | Remove server from local known_hosts file"
   ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_setup_ip }}"
   register: _hetzner_server_setup_cmd_output
   failed_when: _hetzner_server_setup_cmd_output.rc != 0
@@ -28,11 +28,11 @@
   ignore_errors: true
   delegate_to: "localhost"
 
-- name: "Rescue | Pause a bit for the hardware reset to kick in"
+- name: "Setup | Rescue | Pause a bit for the hardware reset to kick in"
   ansible.builtin.pause:
     seconds: 5
 
-- name: "Rescue | wait 600 seconds for port 22 to become open"
+- name: "Setup | Rescue | wait 600 seconds for port 22 to become open"
   ansible.builtin.wait_for:
     port: 22
     host: '{{ hetzner_server_setup_ip }}'
@@ -40,16 +40,28 @@
     timeout: 600
   connection: "local"
 
-- name: "Rescue | Copy file with owner and permissions"
-  ansible.builtin.copy:
-    src: "{{ hetzner_server_setup_image_source }}"
-    dest: "{{ hetzner_server_setup_image }}"
-    owner: root
-    group: root
-    mode: "0644"
-  delegate_to: "{{ hetzner_server_setup_ip }}"
+- name: "Setup | Rescue | Choose image to install when no custom image is set"
+  when:
+    - "hetzner_server_setup_custom_image is not defined"
+    - "hetzner_server_setup_custom_image_source is not defined"
+  ansible.builtin.include_tasks: "images.yml"
 
-- name: "Rescue | Copy autosetup configuration file"
+- name: "Setup | Rescue | Choose image to install when custom image is set"
+  when:
+    - "hetzner_server_setup_custom_image is defined"
+    - "hetzner_server_setup_custom_image_source is defined"
+  block:
+
+    - name: "Setup | Rescue | Copy file with owner and permissions"
+      ansible.builtin.copy:
+        src: "{{ hetzner_server_setup_custom_image_source }}"
+        dest: "{{ hetzner_server_custom_setup_image }}"
+        owner: root
+        group: root
+        mode: "0644"
+      delegate_to: "{{ hetzner_server_setup_ip }}"
+
+- name: "Setup | Rescue | Copy autosetup configuration file"
   ansible.builtin.template:
     src: "templates/setup/hetzner_rescue_autosetup.j2"
     dest: /root/hetzner_rescue_autosetup.ansible
@@ -58,7 +70,13 @@
     mode: "0644"
   delegate_to: "{{ hetzner_server_setup_ip }}"
 
-- name: "Rescue | Run installimage"
+- name: "Setup | Rescue | Check if /root/.oldroot/nfs/install/installimage exists"
+  ansible.builtin.stat:
+    path: "/root/.oldroot/nfs/install/installimage"
+  register: "_hetzner_server_setup_installimage"
+
+- name: "Setup | Rescue | Run installimage"
+  when: "_hetzner_server_setup_installimage.stat.exists"
   ansible.builtin.command: "/root/.oldroot/nfs/install/installimage -a -c /root/hetzner_rescue_autosetup.ansible"
   environment:
     TERM: "vt100"
@@ -67,21 +85,21 @@
   failed_when: false
   delegate_to: "{{ hetzner_server_setup_ip }}"
 
-- name: "Rescue | Print installimage output with -v"
+- name: "Setup | Rescue | Print installimage output with -v"
   ansible.builtin.debug:
-    var: _hetzner_server_setup_installimage_result.stdout_lines
+    var: "_hetzner_server_setup_installimage_result.stdout_lines"
     verbosity: 1
   delegate_to: "localhost"
 
-- name: "Rescue | Check stderr from installimage"
+- name: "Setup | Rescue | Check stderr from installimage"
   ansible.builtin.debug:
     msg: "Something want wrong at installimage: {{ _hetzner_server_setup_installimage_result.stderr_lines | join('\n') }}"
   when:
-    - _hetzner_server_setup_installimage_result.stderr_lines | length > 0
-    - not hetzner_server_setup_image_ignore_errors
+    - "_hetzner_server_setup_installimage_result.stderr_lines | length > 0"
+    - "not hetzner_server_setup_image_ignore_errors"
   delegate_to: "localhost"
 
-- name: "Rescue | Check stdout from installimage"
+- name: "Setup | Rescue | Check stdout from installimage"
   ansible.builtin.fail:
     msg: "Installation failed, check log: {{ result.stdout_lines | join('\n') }}"
   when:
@@ -91,18 +109,18 @@
     - not hetzner_server_setup_image_ignore_errors
   delegate_to: "localhost"
 
-- name: "Rescue | Reboot server"
-  ansible.builtin.shell: sync && sleep 2 && shutdown -r now
+- name: "Setup | Rescue | Reboot server"
+  ansible.builtin.shell: "sync && sleep 2 && shutdown -r now"
   async: 1
   poll: 0
   changed_when: true
   failed_when: false
   delegate_to: "{{ hetzner_server_setup_ip }}"
 
-- name: "Rescue | Remove server from local known_hosts file"
+- name: "Setup | Rescue | Remove server from local known_hosts file"
   ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_setup_ip }}"
-  register: _hetzner_server_setup_cmd_output
-  failed_when: _hetzner_server_setup_cmd_output.rc != 0
+  register: "_hetzner_server_setup_cmd_output"
+  failed_when: "_hetzner_server_setup_cmd_output.rc != 0"
   changed_when: '"updated" in _hetzner_server_setup_cmd_output.stdout'
   ignore_errors: true
   delegate_to: "localhost"

@@ -1,5 +1,5 @@
 ---
-- name: "Api | Query Hetzner API"
+- name: "Setup | Api | Query Hetzner API"
   ansible.builtin.uri:
     url: "{{ hetzner_server_setup_api_url }}/{{ hetzner_server_setup_api_action }}"
     return_content: true
@@ -15,22 +15,24 @@
   delegate_to: localhost
   ignore_errors: true
 
-- name: "Api | Handle errors"
+- name: "Setup | Api | Handle errors"
   block:
-    - name: "Api | Check if the request was successful (200 status code)"
+
+    - name: "Setup | Api | Check if the request was successful (200 status code)"
       ansible.builtin.assert:
         that:
           - "_hetzner_server_setup_api_result.status == 200"
         success_msg: "HTTP request successful"
         fail_msg: "HTTP request failed with status {{ _hetzner_server_setup_api_result.status }}"
 
-    - name: "Api | Handle other HTTP errors"
+    - name: "Setup | Api | Handle other HTTP errors"
       ansible.builtin.fail:
         msg: "HTTP request failed with status {{ _hetzner_server_setup_api_result.status }}"
       when: "_hetzner_server_setup_api_result.status not in [200, 201, 202, 204, 206]"
 
   rescue:
-    - name: "Api | Handle exceptions and errors"
+
+    - name: "Setup | Api | Handle exceptions and errors"
       ansible.builtin.fail:
         msg: "HTTP request failed: {{ _hetzner_server_setup_api_result.msg }}"
 

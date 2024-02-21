@@ -55,33 +55,4 @@
           - "hetzner_server_setup_hostname is string"
         quiet: true
 
-    - name: "Assert | Test if hetzner_server_setup_image is set correctly"
-      ansible.builtin.assert:
-        that:
-          - "hetzner_server_setup_image is defined"
-          - "hetzner_server_setup_image is string"
-        quiet: true
-
-    - name: "Assert | Test if hetzner_server_setup_image_source is set correctly"
-      ansible.builtin.assert:
-        that:
-          - "hetzner_server_setup_image_source is defined"
-          - "hetzner_server_setup_image_source is string"
-        quiet: true
-
-    - name: "Assert | Test if hetzner_server_setup_image_ignore_errors is set correctly"
-      ansible.builtin.assert:
-        that:
-          - "hetzner_server_setup_image_ignore_errors is defined"
-          - "hetzner_server_setup_image_ignore_errors is boolean"
-        quiet: true
-
-    - name: "Assert | Test if hetzner_server_setup_size_of_libvirt_images is set correctly"
-      ansible.builtin.assert:
-        that:
-          - "hetzner_server_setup_size_of_libvirt_images is defined"
-          - "hetzner_server_setup_size_of_libvirt_images is string"
-          - "hetzner_server_setup_size_of_libvirt_images in ['all', 'small', 'medium', 'large']"
-        quiet: true
-
 ...

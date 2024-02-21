@@ -2,7 +2,9 @@
 hetzner_server_setup_api_url: "https://robot-ws.your-server.de"
 hetzner_server_setup_disk1: "sda"
 hetzner_server_setup_disk2: "sdb"
-hetzner_server_setup_image: "/root/CentOS-91-el-x86_64-minimal.tar.xz"
+hetzner_server_setup_swraid: "1"
+hetzner_server_setup_swraidlevel: "0"
+hetzner_server_setup_image: "/root/images/CentOS-90-stream-amd64-base.tar.gz"
 hetzner_server_setup_image_ignore_errors: false
 hetzner_server_setup_size_of_libvirt_images: "all"
 

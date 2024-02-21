@@ -1,0 +1,45 @@
+---
+- name: "Setup | Images | Find all .tar.gz files in /root/images that are not symlinks"
+  ansible.builtin.find:
+    paths: "/root/images"
+    patterns: "*.tar.gz"
+    file_type: "file"
+    follow: false  # This ensures symlinks are not followed
+  register: "_hetzner_server_setup_image_files_found"
+
+- name: "Setup | Images | Show how many images were found"
+  ansible.builtin.debug:
+    msg: "Found {{ _hetzner_server_setup_image_files_found.files | count }} hetzner images"
+  failed_when: (_hetzner_server_setup_image_files_found.files | count) | int == 0
+
+- name: "Setup | Images | Select Hetzner Image"
+  when: _hetzner_server_setup_image_files_found.files | count > 0
+  block:
+
+    - name: "Setup | Images | Select Hetzner Server"
+      ansible.builtin.pause:
+        prompt: |
+          {% for _hetzner_image in _hetzner_server_setup_image_files_found.files %}
+          {{ loop.index0 }} => {{ _hetzner_image.path }}
+          {% endfor %}
+          Select your Hetzner image, by entering the number
+      register: "_hetzner_server_setup_selection"
+      delegate_to: "localhost"
+
+    - name: "Setup | Images | Test if selection is correct"
+      ansible.builtin.assert:
+        that:
+          - "_hetzner_server_setup_selection is defined"
+          - "_hetzner_server_setup_selection.user_input | int >= 0"
+          - "_hetzner_server_setup_selection.user_input | int < _hetzner_server_setup_image_files_found.files| count"
+        fail_msg: "Please select an existing Hetzner image"
+        success_msg: "Hetzner image selected"
+        quiet: false
+      delegate_to: "localhost"
+
+    - name: "Setup | Images | Set hetzner_server_setup_image"
+      ansible.builtin.set_fact:
+        hetzner_server_setup_image: "{{ _hetzner_server_setup_image_files_found.files[_hetzner_server_setup_selection.user_input | int].path }}"
+      delegate_to: "localhost"
+
+...
