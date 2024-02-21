@@ -5,9 +5,14 @@
     method: "GET"
     user: "{{ hetzner_server_setup_api_username }}"
     password: "{{ hetzner_server_setup_api_password }}"
-    force_basic_auth: "yes"
-    status_code: "200"
+    force_basic_auth: true
+    status_code: 200
   register: "_hetzner_server_setup_rescue_state"
+  delegate_to: "localhost"
+
+- name: "Setup | Rescue | Show rescue mode status"
+  ansible.builtin.debug:
+    msg: "Rescue mode is {{ _hetzner_server_setup_rescue_state.json.rescue.active }}"
   delegate_to: "localhost"
 
 - name: "Setup | Rescue | Enable rescue mode"
@@ -89,6 +94,7 @@
   ansible.builtin.stat:
     path: "/root/.oldroot/nfs/install/installimage"
   register: "_hetzner_server_setup_installimage"
+  become: true
 
 - name: "Setup | Rescue | Run installimage"
   when: "_hetzner_server_setup_installimage.stat.exists"
@@ -99,6 +105,7 @@
   changed_when: true
   failed_when: false
   delegate_to: "{{ hetzner_server_setup_ip }}"
+  become: true
 
 - name: "Setup | Rescue | Print installimage output with -v"
   ansible.builtin.debug:
