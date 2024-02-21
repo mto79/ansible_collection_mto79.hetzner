@@ -133,6 +133,8 @@
       _hetzner_server_setup_installimage_result.stdout is search('Cancelled')"
     - "not hetzner_server_setup_image_ignore_errors"
   delegate_to: "localhost"
+  changed_when: true
+  failed_when: false
 
 - name: "Setup | Rescue | Reboot server"
   ansible.builtin.shell: "sync && sleep 2 && shutdown -r now"
