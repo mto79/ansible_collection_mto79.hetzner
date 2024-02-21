@@ -1,6 +1,12 @@
 # [Hetzner-Server](#hetzner-server)
 
-Hetzner role to provisioning a dedicated server with server
+Hetzner role to provisioning a dedicated server.
+
+## [Table of Contents](#table-of-contents)
+
+## [Description](#description)
+
+When no custom image is provided, the role will use the selcted imag or default image for the Hetzner server.
 
 ## [Requirements](#requirements)
 
@@ -43,10 +49,6 @@ Hetzner role to provisioning a dedicated server with server
 ## [Maintainers](#maintainers)
 
 Marc Ouwerkerk (https://github.com/mto79)
-
-## [Todo](#todo)
-
-* testing
 
 ## [License](#license)
 
