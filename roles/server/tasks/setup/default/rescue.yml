@@ -1,22 +1,22 @@
 ---
-- name: "Setup | Rescue | Check rescue mode"
-  ansible.builtin.uri:
-    url: "{{ hetzner_server_setup_api_url }}/boot/{{ hetzner_server_setup_number }}/rescue"
-    method: "GET"
-    user: "{{ hetzner_server_setup_api_username }}"
-    password: "{{ hetzner_server_setup_api_password }}"
-    force_basic_auth: true
-    status_code: 200
-  register: "_hetzner_server_setup_rescue_state"
-  delegate_to: "localhost"
+# - name: "Setup | Rescue | Check rescue mode"
+#   ansible.builtin.uri:
+#     url: "{{ hetzner_server_setup_api_url }}/boot/{{ hetzner_server_setup_number }}/rescue"
+#     method: "GET"
+#     user: "{{ hetzner_server_setup_api_username }}"
+#     password: "{{ hetzner_server_setup_api_password }}"
+#     force_basic_auth: true
+#     status_code: 200
+#   register: "_hetzner_server_setup_rescue_state"
+#   delegate_to: "localhost"
 
-- name: "Setup | Rescue | Show rescue mode status"
-  ansible.builtin.debug:
-    msg: "Rescue mode is {{ _hetzner_server_setup_rescue_state }}"
-  delegate_to: "localhost"
+# - name: "Setup | Rescue | Show rescue mode status"
+#   ansible.builtin.debug:
+#     msg: "Rescue mode is {{ _hetzner_server_setup_rescue_state }}"
+#   delegate_to: "localhost"
 
 - name: "Setup | Rescue | Enable rescue mode"
-  when: "not _hetzner_server_setup_rescue_state.json.rescue.active"
+  # when: "not _hetzner_server_setup_rescue_state.json.rescue.active"
   block:
 
     - name: "Setup | Rescue | Enable a rescue system (64bit Linux) for the next boot"
