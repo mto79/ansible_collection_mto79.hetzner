@@ -125,13 +125,13 @@
 
 - name: "Setup | Rescue | Check stdout from installimage"
   ansible.builtin.fail:
-    msg: "Installation failed, check log: {{ result.stdout_lines | join('\n') }}"
+    msg: "Installation failed, check log: {{ _hetzner_server_setup_installimage_result.stdout_lines | join('\n') }}"
   when:
+    - "_hetzner_server_setup_installimage_result is defined"
     - >
-      _hetzner_server_setup_installimage_result is defined
-      _hetzner_server_setup_installimage_result.stdout is search('An error occured while installing the new system') or
-      _hetzner_server_setup_installimage_result.stdout is search('Cancelled')
-    - not hetzner_server_setup_image_ignore_errors
+      "_hetzner_server_setup_installimage_result.stdout is search('An error occured while installing the new system') or
+      _hetzner_server_setup_installimage_result.stdout is search('Cancelled')"
+    - "not hetzner_server_setup_image_ignore_errors"
   delegate_to: "localhost"
 
 - name: "Setup | Rescue | Reboot server"
@@ -146,7 +146,7 @@
   ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_setup_ip }}"
   register: "_hetzner_server_setup_cmd_output"
   failed_when: "_hetzner_server_setup_cmd_output.rc != 0"
-  changed_when: '"updated" in _hetzner_server_setup_cmd_output.stdout'
+  changed_when: "'updated' in _hetzner_server_setup_cmd_output.stdout"
   ignore_errors: true
   delegate_to: "localhost"
 
