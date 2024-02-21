@@ -8,10 +8,10 @@
     public_key: "{{ item.public_key }}"
   loop: "{{ hetzner_server_setup_sshkeys }}"
   when:
-    - item.state is defined
-    - item.state == "present"
-    - hetzner_server_setup_sshkeys is defined
-    - hetzner_server_setup_sshkeys | count > 0
+    - "item.state is defined"
+    - "item.state == 'present'"
+    - "hetzner_server_setup_sshkeys is defined"
+    - "hetzner_server_setup_sshkeys | count > 0"
 
 - name: "Setup | Sshkeys | Remove a SSH Key"
   community.hrobot.ssh_key:
@@ -22,10 +22,10 @@
     fingerprint: "{{ item.fingerprint }}"
   loop: "{{ hetzner_server_setup_sshkeys }}"
   when:
-    - item.state is defined
-    - item.state == "absent"
-    - hetzner_server_setup_sshkeys is defined
-    - hetzner_server_setup_sshkeys | count > 0
+    - "item.state is defined"
+    - "item.state == 'absent'"
+    - "hetzner_server_setup_sshkeys is defined"
+    - "hetzner_server_setup_sshkeys | count > 0"
 
 - name: "Setup | Sshkeys | List all SSH keys"
   community.hrobot.ssh_key_info:
@@ -39,7 +39,7 @@
   failed_when: (_hetzner_server_setup_ssh_keys.ssh_keys | count) | int == 0
 
 - name: "Setup | Sshkeys | Select ssh key"
-  when: _hetzner_server_setup_ssh_keys.ssh_keys | count > 0
+  when: "_hetzner_server_setup_ssh_keys.ssh_keys | count > 0"
   block:
 
     - name: "Setup | Sshkeys | Select ssh key"

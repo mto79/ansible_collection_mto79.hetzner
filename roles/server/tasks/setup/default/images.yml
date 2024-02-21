@@ -6,6 +6,7 @@
     file_type: "file"
     follow: false  # This ensures symlinks are not followed
   register: "_hetzner_server_setup_image_files_found"
+  delegate_to: "{{ hetzner_server_setup_ip }}"
 
 - name: "Setup | Images | Show how many images were found"
   ansible.builtin.debug:
