@@ -94,6 +94,7 @@
   ansible.builtin.stat:
     path: "/root/.oldroot/nfs/install/installimage"
   register: "_hetzner_server_setup_installimage"
+  delegate_to: "{{ hetzner_server_setup_ip }}"
   become: true
 
 - name: "Setup | Rescue | Run installimage"
@@ -117,6 +118,7 @@
   ansible.builtin.debug:
     msg: "Something want wrong at installimage: {{ _hetzner_server_setup_installimage_result.stderr_lines | join('\n') }}"
   when:
+    - "_hetzner_server_setup_installimage_result is defined"
     - "_hetzner_server_setup_installimage_result.stderr_lines | length > 0"
     - "not hetzner_server_setup_image_ignore_errors"
   delegate_to: "localhost"
@@ -126,6 +128,7 @@
     msg: "Installation failed, check log: {{ result.stdout_lines | join('\n') }}"
   when:
     - >
+      _hetzner_server_setup_installimage_result is defined
       _hetzner_server_setup_installimage_result.stdout is search('An error occured while installing the new system') or
       _hetzner_server_setup_installimage_result.stdout is search('Cancelled')
     - not hetzner_server_setup_image_ignore_errors
