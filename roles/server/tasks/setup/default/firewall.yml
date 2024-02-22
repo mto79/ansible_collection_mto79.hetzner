@@ -4,12 +4,17 @@
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
     server_ip: "{{ hetzner_server_setup_ip }}"
-  register: "_hetzner_server_setup_firewall"
-  when: "hetzner_server_setup_ip is defined"
+    filter_ipv6: true
+    allowlist_hos: true
+    rules: "{{ hetzner_server_setup_firewall_rules | d(omit) }}"
+  register: "_hetzner_server_setup_firewall_result"
+  when:
+    - "hetzner_server_setup_ip is defined"
+    - "hetzner_server_setup_firewall_rules is defined"
 
 - name: "Setup | Firewall | Show firewall configuration"
   ansible.builtin.debug:
-    msg: "{{ _hetzner_server_setup_firewall }}"
-  when: "_hetzner_server_setup_firewall is defined"
+    msg: "{{ _hetzner_server_setup_firewall_result }}"
+  when: "_hetzner_server_setup_firewall_result is defined"
 
 ...
