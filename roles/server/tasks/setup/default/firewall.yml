@@ -1,9 +1,10 @@
 ---
 - name: "Setup | Firewall | Get firewall configuration for server"
-  community.hrobot.firewall_info:
+  community.hrobot.firewall:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
     server_ip: "{{ hetzner_server_setup_ip }}"
+    state: "present"
     filter_ipv6: true
     allowlist_hos: true
     rules: "{{ hetzner_server_setup_firewall_rules | d(omit) }}"
