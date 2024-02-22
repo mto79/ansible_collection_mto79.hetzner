@@ -1,4 +1,28 @@
 ---
+- name: "Setup | Rescue | Prompt for confirmation"
+  ansible.builtin.pause:
+    prompt: "This will boot the server into rescue mode and DELETE ALL DATA. Type 'yes' in all caps to confirm"
+  register: "_hetzner_server_setup_confirmation"
+  run_once: true
+  delegate_to: "localhost"
+
+- name: "Setup | Rescue | Fail if confirmation is not 'YES'"
+  ansible.builtin.fail:
+    msg: "Confirmation not 'YES'"
+  when: "_hetzner_server_setup_confirmation.user_input != 'YES'"
+
+- name: "Setup | Rescue | Prompt for confirmation"
+  ansible.builtin.pause:
+    prompt: "ARE YOU SURE? Type 'yes' in all caps to confirm"
+  register: "_hetzner_server_setup_confirmation_2"
+  run_once: true
+  delegate_to: "localhost"
+
+- name: "Setup | Rescue | Fail if confirmation is not 'YES'"
+  ansible.builtin.fail:
+    msg: "Confirmation not 'YES'"
+  when: "_hetzner_server_setup_confirmation_2.user_input != 'YES'"
+
 # - name: "Setup | Rescue | Check rescue mode"
 #   ansible.builtin.uri:
 #     url: "{{ hetzner_server_setup_api_url }}/boot/{{ hetzner_server_setup_number }}/rescue"
