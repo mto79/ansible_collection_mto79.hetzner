@@ -1,8 +1,4 @@
 ---
-- name: "Setup | Manage SSH keys"
-  ansible.builtin.include_tasks:
-    file: "default/sshkeys.yml"
-
 - name: "Setup | Manage Servers"
   ansible.builtin.include_tasks:
     file: "default/servers.yml"
@@ -15,21 +11,34 @@
       hetzner_server_setup_authorized_key is not defined or hetzner_server_setup_authorized_key == ""
   delegate_to: "localhost"
 
-- name: "Setup | Rescue Server"
+- name: "Setup | Reset server"
+  when:
+    - "hetzner_server_setup_reset_server is defined"
+    - "hetzner_server_setup_reset_server | bool"
+  block:
+    - name: "Setup | Manage SSH keys"
+      ansible.builtin.include_tasks:
+        file: "default/sshkeys.yml"
+
+    - name: "Setup | Rescue Server"
+      ansible.builtin.include_tasks:
+        file: "default/rescue.yml"
+
+    - name: "Setup | Wait 600 seconds for port 22 to become open"
+      ansible.builtin.wait_for:
+        port: 22
+        host: '{{ hetzner_server_setup_ip }}'
+        delay: 10
+        timeout: 600
+      connection: "local"
+
+    - name: "Setup | Refresh information after re-install of {{ hetzner_server_setup_ip }}"
+      ansible.builtin.gather_facts:
+      register: _hetzner_server_setup_host_facts
+      delegate_to: "{{ hetzner_server_setup_ip }}"
+
+- name: "Setup | Manage firewall"
   ansible.builtin.include_tasks:
-    file: "default/rescue.yml"
-
-- name: "Setup | Wait 600 seconds for port 22 to become open"
-  ansible.builtin.wait_for:
-    port: 22
-    host: '{{ hetzner_server_setup_ip }}'
-    delay: 10
-    timeout: 600
-  connection: "local"
-
-- name: "Setup | Refresh information after re-install of {{ hetzner_server_setup_ip }}"
-  ansible.builtin.gather_facts:
-  register: _hetzner_server_setup_host_facts
-  delegate_to: "{{ hetzner_server_setup_ip }}"
+    file: "default/firewall.yml"
 
 ...

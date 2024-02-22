@@ -1,5 +1,6 @@
 ---
 hetzner_server_setup_api_url: "https://robot-ws.your-server.de"
+hetzner_server_setup_reset_server: false
 hetzner_server_setup_disk1: "sda"
 hetzner_server_setup_disk2: "sdb"
 hetzner_server_setup_swraid: "1"

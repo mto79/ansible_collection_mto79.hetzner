@@ -1,0 +1,15 @@
+---
+- name: "Setup | Firewall | Get firewall configuration for server"
+  community.hrobot.firewall_info:
+    hetzner_user: "{{ hetzner_server_setup_api_username }}"
+    hetzner_password: "{{ hetzner_server_setup_api_password }}"
+    server_ip: "{{ hetzner_server_setup_ip }}"
+  register: "_hetzner_server_setup_firewall"
+  when: "hetzner_server_setup_ip is defined"
+
+- name: "Setup | Firewall | Show firewall configuration"
+  ansible.builtin.debug:
+    msg: "{{ _hetzner_server_setup_firewall }}"
+  when: "_hetzner_server_setup_firewall is defined"
+
+...

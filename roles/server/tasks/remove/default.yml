@@ -1,6 +1,0 @@
----
-- name: "Remove | Display module parameters"
-  ansible.builtin.debug:
-    msg: "hetzner_server_remove"
-
-...
