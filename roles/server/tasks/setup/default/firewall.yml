@@ -7,11 +7,13 @@
     state: "present"
     filter_ipv6: true
     allowlist_hos: true
-    rules: "{{ hetzner_server_setup_firewall_rules | d(omit) }}"
+    rules:
+      input: "{{ hetzner_server_setup_firewall_inbound_rules | d(omit) }}"
+      output: "{{ hetzner_server_setup_firewall_outbound_rules | d(omit) }}"
   register: "_hetzner_server_setup_firewall_result"
   when:
     - "hetzner_server_setup_ip is defined"
-    - "hetzner_server_setup_firewall_rules is defined"
+    # - "hetzner_server_setup_firewall_rules is defined"
 
 - name: "Setup | Firewall | Show firewall configuration"
   ansible.builtin.debug:
