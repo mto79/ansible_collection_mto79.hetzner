@@ -8,8 +8,10 @@
     filter_ipv6: true
     allowlist_hos: true
     rules:
-      input: "{{ hetzner_server_setup_firewall_inbound_rules | d(omit) }}"
-      output: "{{ hetzner_server_setup_firewall_outbound_rules | d(omit) }}"
+      input:
+        "{{ hetzner_server_setup_firewall_inbound_rules | d(omit) }}"
+      output:
+        "{{ hetzner_server_setup_firewall_outbound_rules | d(omit) }}"
 
   register: "_hetzner_server_setup_firewall_result"
   when:
