@@ -1,5 +1,5 @@
 ---
-- name: "Setup | Firewall | Get firewall configuration for server"
+- name: "Setup | Firewall | Configure firewall configuration for server"
   community.hrobot.firewall:
     hetzner_user: "{{ hetzner_server_setup_api_username }}"
     hetzner_password: "{{ hetzner_server_setup_api_password }}"
@@ -8,14 +8,8 @@
     filter_ipv6: true
     allowlist_hos: true
     rules:
-      input:
-        - name: "Allow ICMP protocol"
-          # This is needed so you can ping your server
-          ip_version: "ipv4"
-          protocol: "icmp"
-          action: "accept"
-          # Note that it is not possible to disable ICMP for IPv6
-          # (https://robot.hetzner.com/doc/webservice/en.html#post-firewall-server-id)
+      input: "{{ hetzner_server_setup_firewall_inbound_rules | d(omit) }}"
+
       # output: "{{ hetzner_server_setup_firewall_outbound_rules | d(omit) }}"
   register: "_hetzner_server_setup_firewall_result"
   when:
