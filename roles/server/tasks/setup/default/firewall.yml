@@ -9,7 +9,9 @@
     allowlist_hos: true
     rules:
       input: "{{ hetzner_server_setup_firewall_inbound_rules | d(omit) }}"
-      output: "{{ hetzner_server_setup_firewall_outbound_rules | d(omit) }}"
+      output:
+        - name: "Accept everything"
+          action: "accept"
   register: "_hetzner_server_setup_firewall_result"
   when:
     - "hetzner_server_setup_ip is defined"
