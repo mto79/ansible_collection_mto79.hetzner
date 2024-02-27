@@ -98,10 +98,11 @@
 
     - name: "Setup | Rescue | Download image"
       when:
+        - "hetzner_server_setup_custom_image_source_type is defined"
         - "hetzner_server_setup_custom_image_source_type == 'download'"
       ansible.builtin.get_url:
         url: "{{ hetzner_server_setup_custom_image_source }}"
-        dest: "{{ hetzner_server_custom_setup_image }}"
+        dest: "{{ hetzner_server_setup_custom_image }}"
         owner: "root"
         group: "root"
         mode: "0644"
@@ -109,10 +110,11 @@
 
     - name: "Setup | Rescue | Copy image with owner and permissions"
       when:
+        - "hetzner_server_setup_custom_image_source_type is defined"
         - "hetzner_server_setup_custom_image_source_type == 'local'"
       ansible.builtin.copy:
         src: "{{ hetzner_server_setup_custom_image_source }}"
-        dest: "{{ hetzner_server_custom_setup_image }}"
+        dest: "{{ hetzner_server_setup_custom_image }}"
         owner: root
         group: root
         mode: "0644"
