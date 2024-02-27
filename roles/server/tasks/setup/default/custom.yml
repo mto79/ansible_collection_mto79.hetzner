@@ -23,7 +23,51 @@
     mode: "0644"
   delegate_to: "{{ hetzner_server_setup_ip }}"
 
-- name: "Setup | Custom | Set hetzner_server_setup_image"
+# - name: "Setup | Custom | Use curl to download image from WebDAV location"
+#   when:
+#     - "hetzner_server_setup_custom_image_source_type is defined"
+#     - "hetzner_server_setup_custom_image_source_type == 'webdav'"
+#     - "hetzner_server_setup_custom_image_webdav_user is defined"
+#     - "hetzner_server_setup_custom_image_webdav_token is defined"
+#     - "hetzner_server_setup_custom_image_webdav_location is defined"
+#   ansible.builtin.command: >
+#       curl -u {{ hetzner_server_setup_custom_image_webdav_user }}:{{ hetzner_server_setup_custom_image_webdav_token }}
+#       -o {{ hetzner_server_setup_custom_image }} {{ hetzner_server_setup_custom_image_webdav_location }}
+#   args:
+#     creates: "{{ hetzner_server_setup_custom_image }}"
+#   failed_when: false
+#   changed_when: false
+#   delegate_to: "{{ hetzner_server_setup_ip }}"
+#   tags:
+#     - "skip-ansible-lint"
+
+- name: "Setup | Custom | Use uri module to download image from WebDAV location"
+  when:
+    - "hetzner_server_setup_custom_image_source_type is defined"
+    - "hetzner_server_setup_custom_image_source_type == 'webdav'"
+    - "hetzner_server_setup_custom_image_webdav_user is defined"
+    - "hetzner_server_setup_custom_image_webdav_token is defined"
+    - "hetzner_server_setup_custom_image_webdav_location is defined"
+  ansible.builtin.uri:
+    url: "{{ hetzner_server_setup_custom_image_webdav_location }}"
+    method: GET
+    user: "{{ hetzner_server_setup_custom_image_webdav_user }}"
+    password: "{{ hetzner_server_setup_custom_image_webdav_token }}"
+    return_content: false
+    dest: "{{ hetzner_server_setup_custom_image }}"
+    force_basic_auth: true
+    status_code: 200
+  register: "_hetzner_server_setup_custom_image_download_result"
+  until: "_hetzner_server_setup_custom_image_download_result.status == 200"
+  retries: 3
+  delay: 5
+  failed_when: "_hetzner_server_setup_custom_image_download_result.status != 200"
+  changed_when: "_hetzner_server_setup_custom_image_download_result.status == 200"
+  delegate_to: "{{ hetzner_server_setup_ip }}"
+  args:
+    creates: "{{ hetzner_server_setup_custom_image }}"
+
+- name: "Setup | Custom | Set var hetzner_server_setup_image"
   ansible.builtin.set_fact:
     hetzner_server_setup_image: "{{ hetzner_server_setup_custom_image }}"
   delegate_to: "localhost"
