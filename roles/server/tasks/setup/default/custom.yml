@@ -29,10 +29,9 @@
 #     - "hetzner_server_setup_custom_image_source_type == 'webdav'"
 #     - "hetzner_server_setup_custom_image_webdav_user is defined"
 #     - "hetzner_server_setup_custom_image_webdav_token is defined"
-#     - "hetzner_server_setup_custom_image_webdav_location is defined"
 #   ansible.builtin.command: >
 #       curl -u {{ hetzner_server_setup_custom_image_webdav_user }}:{{ hetzner_server_setup_custom_image_webdav_token }}
-#       -o {{ hetzner_server_setup_custom_image }} {{ hetzner_server_setup_custom_image_webdav_location }}
+#       -o {{ hetzner_server_setup_custom_image }} {{ hetzner_server_setup_custom_image_source }}
 #   args:
 #     creates: "{{ hetzner_server_setup_custom_image }}"
 #   failed_when: false
@@ -47,9 +46,8 @@
     - "hetzner_server_setup_custom_image_source_type == 'webdav'"
     - "hetzner_server_setup_custom_image_webdav_user is defined"
     - "hetzner_server_setup_custom_image_webdav_token is defined"
-    - "hetzner_server_setup_custom_image_webdav_location is defined"
   ansible.builtin.uri:
-    url: "{{ hetzner_server_setup_custom_image_webdav_location }}"
+    url: "{{ hetzner_server_setup_custom_image_source }}"
     method: GET
     user: "{{ hetzner_server_setup_custom_image_webdav_user }}"
     password: "{{ hetzner_server_setup_custom_image_webdav_token }}"
