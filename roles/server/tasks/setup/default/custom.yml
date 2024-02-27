@@ -1,0 +1,31 @@
+---
+- name: "Setup | Custom | Download image"
+  when:
+    - "hetzner_server_setup_custom_image_source_type is defined"
+    - "hetzner_server_setup_custom_image_source_type == 'download'"
+  ansible.builtin.get_url:
+    url: "{{ hetzner_server_setup_custom_image_source }}"
+    dest: "{{ hetzner_server_setup_custom_image }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  delegate_to: "{{ hetzner_server_setup_ip }}"
+
+- name: "Setup | Custom | Copy image with owner and permissions"
+  when:
+    - "hetzner_server_setup_custom_image_source_type is defined"
+    - "hetzner_server_setup_custom_image_source_type == 'local'"
+  ansible.builtin.copy:
+    src: "{{ hetzner_server_setup_custom_image_source }}"
+    dest: "{{ hetzner_server_setup_custom_image }}"
+    owner: root
+    group: root
+    mode: "0644"
+  delegate_to: "{{ hetzner_server_setup_ip }}"
+
+- name: "Setup | Custom | Set hetzner_server_setup_image"
+  ansible.builtin.set_fact:
+    hetzner_server_setup_image: "{{ hetzner_server_setup_custom_image }}"
+  delegate_to: "localhost"
+
+...
