@@ -159,8 +159,16 @@
   failed_when: false
   delegate_to: "{{ hetzner_server_setup_ip }}"
 
-- name: "Setup | Rescue | Remove server from local known_hosts file"
+- name: "Setup | Rescue | Remove server by ip from local known_hosts file"
   ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_setup_ip }}"
+  register: "_hetzner_server_setup_cmd_output"
+  failed_when: "_hetzner_server_setup_cmd_output.rc != 0"
+  changed_when: "'updated' in _hetzner_server_setup_cmd_output.stdout"
+  ignore_errors: true
+  delegate_to: "localhost"
+
+- name: "Setup | Rescue | Remove server by fqdn from local known_hosts file"
+  ansible.builtin.command: "/usr/bin/ssh-keygen -R {{ hetzner_server_setup_hostname }}"
   register: "_hetzner_server_setup_cmd_output"
   failed_when: "_hetzner_server_setup_cmd_output.rc != 0"
   changed_when: "'updated' in _hetzner_server_setup_cmd_output.stdout"

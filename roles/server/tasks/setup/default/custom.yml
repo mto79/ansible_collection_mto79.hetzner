@@ -1,4 +1,15 @@
 ---
+- name: "Setup | Display custom image information"
+  when:
+    - "hetzner_server_setup_custom_image_source_type is defined"
+    - "hetzner_server_setup_custom_image_source is defined"
+    - "hetzner_server_setup_custom_image is defined"
+  ansible.builtin.debug:
+    msg: |
+      "Custom image source type: {{ hetzner_server_setup_custom_image_source_type }}"
+      "Custom image source: {{ hetzner_server_setup_custom_image_source }}"
+      "Custom image: {{ hetzner_server_setup_custom_image }}"
+
 - name: "Setup | Custom | Download image"
   when:
     - "hetzner_server_setup_custom_image_source_type is defined"
